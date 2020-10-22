@@ -1,0 +1,78 @@
+$bodyFont: sfProTextRegular;
+$titleFont: sfProTextMedium;
+
+@font-face {
+    font-family: sfProTextRegular;
+    src: url(/assets/fonts/SFProTextRegular.ttf);
+}
+
+@font-face {
+    font-family: sfProTextMedium;
+    src: url(/assets/fonts/SFProTextMedium.ttf);
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.appContainer {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-flow: column wrap;
+    align-items: center;
+    justify-content: center;
+    .topColorBox {
+        width: 100%;
+        height: 222px;
+        background: #00BFA5;
+    }
+    .bottomColorBox {
+        width: 100%;
+        height: calc(100% - 222px);
+        background: #D3DBD9;
+    }
+    .header {
+        width: 100%;
+        position: absolute;
+        display: flex;
+        align-items: center;
+        margin-top: 27px;
+        margin-bottom: 28px;
+        margin-left: 26.5%;
+        top: 0;
+        z-index: 2;
+        .appTitle {
+            margin-left: 14px;
+            color: white;
+            font-size: 14px;
+            font-family: $titleFont;
+            font-weight: bold;
+        }
+    }
+    .box {
+        width: 65%;
+        position: absolute;
+        padding: 70px;
+        .media {
+            .media-content {
+                .content {
+                    .field {
+                        .buttons {
+                            .is-info {
+                                width: 100px;
+                                background: #2C948A;
+                            }
+                            .is-success {
+                                width: 100px;
+                                background: #03D755;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,96 @@
+$bodyFont: sfProTextRegular;
+$titleFont: sfProTextMedium;
+
+.messageRightContainer {
+    position: relative;
+    margin-bottom: 2px;
+    padding-left: 9%;
+    padding-right: 9%;
+    display: flex;
+    justify-content: flex-end;
+    .messageTextRight1 {
+        max-width: 65%;
+        display: flex;
+        align-items: center;
+        font-size: 14.2px;
+        font-family: $titleFont;
+        background: #DBF8C6;
+        border-radius: 7.5px 0 7.5px 7.5px;
+        padding: 6px 7px 8px 9px;
+        box-shadow:0 1px .5px rgba(black,.13);
+        flex-grow: .1;
+    }
+    .messageTimeContainer {
+        position: relative;
+        height: 15px;
+        margin-bottom: 1px;
+        padding-right: 12px;
+        display: flex;
+        align-self: flex-end;
+        left: -45px;
+        .messageTimeChat{
+            margin-right: 2px;
+            font-size: 11px;
+            color: #9AAE8C;
+        }
+    }
+    .rightTail {
+        position: absolute;
+        right: 83px;
+    }
+    .messageTextRight {
+        max-width: 65%;
+        display: flex;
+        align-items: center;
+        font-size: 14.2px;
+        font-family: $titleFont;
+        background: #DBF8C6;
+        border-radius: 7.5px;
+        padding: 6px 7px 8px 9px;
+        box-shadow:0 1px .5px rgba(black,.13);
+        flex-grow: .1;
+    }
+}
+.messageLeftContainer {
+    position: relative;
+    margin-bottom: 2px;
+    padding-left: 9%;
+    padding-right: 9%;
+    display: flex;
+    .messageTextLeft1 {
+        max-width: 65%;
+        display: flex;
+        align-items: center;
+        font-size: 14.2px;
+        font-family: $titleFont;
+        background: white;
+        border-radius: 0 7.5px 7.5px 7.5px;
+        padding: 6px 7px 8px 9px;
+        box-shadow:0 1px .5px rgba(black,.13);
+        flex-grow: .1;
+    }
+    .messageTimeChat{
+        position: absolute;
+        display: flex;
+        align-self: flex-end;
+        font-size: 11px;
+        color: #C1C1C1;
+        left: 54.5%;
+    }
+    .leftTail {
+        position: absolute;
+        left: 515px;
+    }
+    .messageTextLeft {
+        max-width: 65%;
+        display: flex;
+        align-items: center;
+        font-size: 14.2px;
+        font-family: $titleFont;
+        background: white;
+        border-radius: 7.5px;
+        padding: 6px 7px 8px 9px;
+        box-shadow:0 1px .5px rgba(black,.13);
+        flex-grow: .1;
+    }
+}

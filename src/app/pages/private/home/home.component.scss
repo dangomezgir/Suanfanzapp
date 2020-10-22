@@ -1,0 +1,211 @@
+$bodyFont: sfProTextRegular;
+$titleFont: sfProTextMedium;
+
+@font-face {
+    font-family: sfProTextRegular;
+    src: url(/assets/fonts/SFProTextRegular.ttf);
+}
+
+@font-face {
+    font-family: sfProTextMedium;
+    src: url(/assets/fonts/SFProTextMedium.ttf);
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+#app {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    background: #E5DDD5;
+    font-family: $bodyFont;
+    .leftBigContainer {
+        flex-grow: 1;
+        flex-shrink: 1;
+        flex-basis: 30%;
+        width: 100%;
+        height: 100%;
+        .topBarLeft {
+            width: 100%;
+            height: 59px;
+            background: #EDEDED;
+            padding: 10px 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            .tbLeftContainer {
+                width: 100%;
+                height: 59px;
+                display: flex;
+                flex-flow: row wrap;
+                align-items: center;
+                justify-content: space-between;
+                .profileContainer {
+                    height: 40px;
+                    display: flex;
+                    flex-grow: 1;
+                    align-items: center;
+                    .profile {
+                        width: 40px;
+                        height: 40px;
+                        border-radius: 50%;
+                        cursor: pointer;
+                    }
+                }
+                .leftRightIcons {
+                    height: 40px;
+                    display: flex;
+                    flex-flow: row wrap;
+                    align-items: center;
+                    .statusContainer {
+                        width: 40px;
+                        height: 40px;
+                        padding: 8px;
+                        cursor: pointer;
+                        &:active {
+                            background: #D5D5D5;
+                            border-radius: 50%;
+                        }
+                    }
+                    .newChatContainer {
+                        width: 40px;
+                        height: 40px;
+                        margin: 0 0 0 10px;
+                        padding: 8px;
+                        cursor: pointer;
+                        &:active {
+                            background: #D5D5D5;
+                            border-radius: 50%;
+                        }
+                    }
+                    .leftMore {
+                        width: 40px;
+                        height: 40px;
+                        margin: 0 0 0 10px;
+                        padding: 8px;
+                        cursor: pointer;
+                        &:active {
+                            background: #D5D5D5;
+                            border-radius: 50%;
+                        }
+                    }
+                }
+            }
+        }
+        .searchBarContainer {
+            width: 100%;
+            height: 49px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-grow: 1;
+            background: #F6F6F6;
+            .searchIcon {
+                width: 24px;
+                height: 24px;
+                left: 24px;
+                position: absolute;
+                cursor: pointer;
+            }
+            .searchBarText {
+                font-size: 13.5px;
+                position: absolute;
+                left: 77px;
+                color: #919191;
+                cursor: text;
+            }
+            .searchBar {
+                width: 95%;
+                height: 35px;
+                padding: 0 32px 0 65px;
+                background: white;
+                border-radius: 100px;
+                
+            }
+        }
+        .inboxChat {
+            width: 100%;
+            height: calc(100% - 108px);
+            background: white;
+            .inboxChat1 {
+                width: 100%;
+                height: 72px;
+                background: white;
+                display: flex;
+                cursor: pointer;
+                &:hover {
+                    background: #F5F5F5;
+                }
+                .profileInboxContainer {
+                    width: 77px;
+                    height: 72px;
+                    padding: 0 15px 0 13px;
+                    display: flex;
+                    align-items: center;
+                    .profileInbox {
+                        width: 49px;
+                        height: 49px;
+                        border-radius: 50%;
+                        cursor: pointer;
+                    }
+                }
+                .inboxInfoContainer {
+                    height: 72px;
+                    padding: 0 15px 0 0;
+                    margin-right: 6px;
+                    display: flex;
+                    justify-content: center;
+                    flex-flow: column;
+                    flex-grow: 1;
+                    border-bottom: 1px solid rgba($color: #919191, $alpha: 0.2);
+                    .detailsContainer {
+                        display: flex;
+                        flex-flow: row wrap;
+                        .namePersonChat {
+                            font-size: 16px;
+                            color: black;
+                            flex-grow: 1;
+                            font-family: $titleFont;
+                            cursor: pointer;
+                        }
+                        .messageTime {
+                            font-size: 12px;
+                            color: #878787;
+                            font-family: $titleFont;
+                            cursor: pointer;
+                        }
+                    }
+                    .chatContainer {
+                        display: flex;
+                        flex-flow: row nowrap;
+                        .chatStatus{
+                            width: 18px;
+                            height: 18px;
+                            margin-right: 2px;
+                        }
+                        .chatPreview {
+                            font-size: 14px;
+                            color: #6F6F6F;
+                            font-family: $titleFont;
+                            cursor: pointer;
+                        }
+                    }
+                }
+            }
+            
+        }
+    }
+    .rightBigContainer {
+        flex-grow: 1;
+        flex-shrink: 1;
+        flex-basis: 70%;
+        width: 100%;
+        height: 100%;
+    }
+}

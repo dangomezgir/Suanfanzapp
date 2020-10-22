@@ -1,0 +1,144 @@
+$bodyFont: sfProTextRegular;
+$titleFont: sfProTextMedium;
+
+.topBarRight {
+    width: 100%;
+    height: 59px;
+    background: #EDEDED;
+    border-left: 1px solid #DADADA;
+    padding: 10px 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .tbRightContainer {
+        width: 100%;
+        height: 59px;
+        display: flex;
+        flex-flow: row wrap;
+        align-items: center;
+        .profilePicContainer {
+            width: 55px;
+            height: 40px;
+            padding: 0 15px 0 0;
+            display: flex;
+            align-items: center;
+            .profilePic {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                cursor: pointer;
+            }
+        }
+        .namePersonChat {
+            font-size: 16px;
+            color: black;
+            font-family: $titleFont;
+            flex-grow: 1;
+            cursor: pointer;
+        }
+        .rightRightIcons {
+            height: 40px;
+            margin-left: 20px;
+            display: flex;
+            flex-flow: row wrap;
+            align-items: center;
+            .searchIconRight {
+                width: 40px;
+                height: 40px;
+                padding: 8px;
+                cursor: pointer;
+                &:active {
+                    background: #D5D5D5;
+                    border-radius: 50%;
+                }
+            }
+            .rightMore {
+                width: 40px;
+                height: 40px;
+                padding: 8px;
+                cursor: pointer;
+                &:active {
+                    background: #D5D5D5;
+                    border-radius: 50%;
+                }
+            }
+        }
+    }
+}
+.chat {
+    width: 100%;
+    height: calc(100% - 133px);
+    background: #E5DDD5;
+    padding-top: 20px;
+    .chatDateContainer {
+        height: 32px;
+        margin: 12px 0;
+        padding-left: 9%;
+        padding-right: 9%;
+        display: flex;
+        justify-content: center;
+        .chatDate {
+            height: 32px;
+            display: flex;
+            align-items: center;
+            font-size: 12.5px;
+            font-family: $titleFont;
+            background: #E2F3FB;
+            border-radius: 7.5px;
+            padding: 5px 12px 6px;
+            box-shadow:0 1px .5px rgba(black,.13);
+        }
+    }
+    
+}
+.sendMessageForm {
+    width: 100%;
+    height: 62px;
+    padding: 5px 10px;
+    background: #F0F0F0;
+    border-left: 1px solid #DADADA;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .leftMessageFormIcons {
+        width: 94px;
+        height: 52px;
+        padding: 5px 10px;
+        display: flex;
+        align-items: center;
+        .smileyContainer {
+            display: flex;
+            margin-right: 8px;
+            cursor: pointer;
+        }
+        .clipContainer {
+            display: flex;
+            padding: 8px;
+            cursor: pointer;
+            &:active {
+                background: #D5D5D5;
+                border-radius: 50%;
+            }
+        }
+    }
+    .typeMessageForm {
+        flex: 1 1 auto;
+        height: 42px;
+        margin: 5px 10px;
+        padding: 9px 12px 11px;
+        border-radius: 21px;
+        background: white;
+        .messageFormText {
+            height: 20px;
+            font-size: 14.2px;
+            font-family: $bodyFont;
+            color: #919191;
+            cursor: text;
+        }
+    }
+    .microphoneContainer {
+        display: flex;
+        padding: 5px 10px;
+        cursor: pointer;
+    }
+}
