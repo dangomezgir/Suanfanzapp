@@ -9,31 +9,33 @@
     <article class="media">
       <div class="media-content">
         <div class="content">
-          <div class="field">
-            <p class="control has-icons-left has-icons-right">
-              <input class="input" type="email" placeholder="Email">
-              <span class="icon is-small is-left">
-                <i class="fas fa-envelope"></i>
-              </span>
-              <span class="icon is-small is-right">
-                <i class="fas fa-check"></i>
-              </span>
-            </p>
-          </div>
-          <div class="field">
-            <p class="control has-icons-left">
-              <input class="input" type="password" placeholder="Password">
-              <span class="icon is-small is-left">
-                <i class="fas fa-lock"></i>
-              </span>
-            </p>
-          </div>
-          <div class="field">
-            <div class="buttons">
-              <button (click)="goToRegister()" class="button is-info">Register</button>
-              <button class="button is-success" (click)="doLogin()">Login</button>
+          <form [formGroup]="loginForm">
+            <div class="field">
+              <p class="control has-icons-left has-icons-right">
+                <input class="input" type="email" placeholder="Email" formControlName="email" [value]="loginForm.controls.email.value">
+                <span class="icon is-small is-left">
+                  <i class="fas fa-envelope"></i>
+                </span>
+                <span class="icon is-small is-right">
+                  <i class="fas fa-check"></i>
+                </span>
+              </p>
             </div>
-          </div>
+            <div class="field">
+              <p class="control has-icons-left">
+                <input class="input" type="password" placeholder="Password" formControlName="password" [value]="loginForm.controls.password.value">
+                <span class="icon is-small is-left">
+                  <i class="fas fa-lock"></i>
+                </span>
+              </p>
+            </div>
+            <div class="field">
+              <div class="buttons">
+                <button (click)="goToRegister()" class="button is-info">Register</button>
+                <button class="button is-success" (click)="doLogin()">Login</button>
+              </div>
+            </div>
+          </form>
         </div>
       </div>
     </article>
