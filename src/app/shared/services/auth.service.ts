@@ -14,7 +14,8 @@ export class AuthService {
   login(emailI: string, passwordI: string) {
     const user = window.localStorage.getItem('user') || undefined;
     var isLogged=false; // user ? true : false
-    if(user){
+    const isUser = user ? true : false;
+    if(isUser){
       this.user = JSON.parse(user);
       if(emailI==this.user.email&&passwordI==this.user.password){
         this.user.isLogged=true;
