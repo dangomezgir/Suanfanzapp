@@ -1,8 +1,8 @@
 export interface UserI {
     email: string;
-    username: string;
+    telefono: string;
     name: string;
     lname: string;
     password?: string;
-    favNumber?: number;
+    isLogged:boolean
 }
