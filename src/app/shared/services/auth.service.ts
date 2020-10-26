@@ -1,4 +1,4 @@
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { IfStmt, THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Injectable } from '@angular/core';
 import { UserI } from '../interfaces/UserI';
 
@@ -14,16 +14,17 @@ export class AuthService {
   login(emailI: string, passwordI: string) {
     const user = window.localStorage.getItem('user') || undefined;
     var isLogged=false; // user ? true : false
-    this.user = JSON.parse(user);
-    if(emailI==this.user.email&&passwordI==this.user.password){
-      this.user.isLogged=true;
-      window.localStorage.setItem('user',JSON.stringify(this.user));
+    if(user){
+      this.user = JSON.parse(user);
+      if(emailI==this.user.email&&passwordI==this.user.password){
+        this.user.isLogged=true;
+        window.localStorage.setItem('user',JSON.stringify(this.user));
+      }
+      else{
+        this.user.isLogged=false;
+      }
     }
-    else{
-      this.user.isLogged=false;
-    }
-
-    
+       
     // const passKey = "hey";
     // console.log(user.password);
     // if (user.password === passKey) {
@@ -34,8 +35,16 @@ export class AuthService {
 
   isLogged() {
     const user = window.localStorage.getItem('user') || undefined;
-    this.user = JSON.parse(user);
-    return this.user.isLogged;
+
+    var logear= user ? true : false;
+
+    if(logear){
+      this.user = JSON.parse(user);
+      if(this.user.isLogged){
+        return this.user.isLogged;
+      }
+    }
+    return false;
   }
 
   logout() {
