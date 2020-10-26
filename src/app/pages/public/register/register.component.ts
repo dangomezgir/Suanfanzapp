@@ -12,12 +12,11 @@ import { AuthService } from 'src/app/shared/services/auth.service';
 export class RegisterComponent implements OnInit {
 
   userForm = new FormGroup({
-    email: new FormControl('pabhoz@gmail.com', Validators.required),
-    username: new FormControl('', Validators.required),
+    email: new FormControl('', Validators.required),
+    telefono: new FormControl('',Validators.required),
     name: new FormControl('', Validators.required),
     lname: new FormControl('', Validators.required),
     password: new FormControl('', Validators.required),
-    favNumber: new FormControl(''),
   });
 
   constructor(private router:Router, private authService:AuthService) { }
@@ -29,19 +28,18 @@ export class RegisterComponent implements OnInit {
     e.preventDefault();
 
     const user: UserI = {
-      email: "pabhoz@usbcali.edu.co",
-      username: "pabhoz",
-      favNumber: 4,
-      lname: "Bejarano",
-      password: "suanfanzon",
-      name: "Pablo",
+      email: this.userForm.controls.email.value,
+      telefono: this.userForm.controls.telefono.value,
+      lname: this.userForm.controls.lname.value,
+      password: this.userForm.controls.password.value,
+      name: this.userForm.controls.name.value,
+      isLogged:false
     };
 
     console.log(this.userForm);
+    window.localStorage.setItem('user',JSON.stringify(user));
+    user.password=undefined;
 
-    //this.authService.login(user);
-
-    //this.router.navigate(['/']);
   }
 
   goToLogin() {

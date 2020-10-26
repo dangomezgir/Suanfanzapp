@@ -19,7 +19,7 @@
           <form [formGroup]="userForm">
             <div class="field">
               <p class="control has-icons-left has-icons-right">
-                <input class="input" type="email" placeholder="Email">
+                <input class="input" type="email" formControlName="email"  placeholder="Email" [value]="userForm.controls.email.value" >
                 <span class="icon is-small is-left">
                   <i class="fas fa-envelope"></i>
                 </span>
@@ -30,8 +30,8 @@
             </div>
             <div class="field">
               <p class="control has-icons-left">
-                <input class="input" formControlName="username" [value]="userForm.controls.username.value" type="text"
-                  placeholder="Username">
+                <input class="input" formControlName="telefono" [value]="userForm.controls.telefono.value" type="text"
+                  placeholder="Telefono">
                 <span class="icon is-small is-left">
                   <i class="fas fa-lock"></i>
                 </span>
@@ -56,14 +56,6 @@
             <div class="field">
               <p class="control has-icons-left">
                 <input class="input" formControlName="lname" type="text" placeholder="Last Name">
-                <span class="icon is-small is-left">
-                  <i class="fas fa-lock"></i>
-                </span>
-              </p>
-            </div>
-            <div class="field">
-              <p class="control has-icons-left">
-                <input class="input" formControlName="favNumber" type="number" placeholder="Favorite Number">
                 <span class="icon is-small is-left">
                   <i class="fas fa-lock"></i>
                 </span>
