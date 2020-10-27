@@ -3,29 +3,46 @@ import { Injectable } from '@angular/core';
 import * as firebase from 'firebase';
 import { UserI } from '../interfaces/UserI';
 
+
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
   user: UserI | undefined;
-  dbRef = firebase.database().ref('/users');
+
   constructor() { }
+
   
-  login(emailI: string, passwordI: string) {
-    const user = window.localStorage.getItem('user') || undefined;
-    var isLogged=false; // user ? true : false
-    const isUser = user ? true : false;
-    if(isUser){
-      this.user = JSON.parse(user);
-      if(emailI==this.user.email&&passwordI==this.user.password){
-        this.user.isLogged=true;
-        window.localStorage.setItem('user',JSON.stringify(this.user));
-      }
-      else{
-        this.user.isLogged=false;
+
+
+  
+  login(userInput: string, passwordInput: string, regList: UserI[]) {
+
+    if(regList.length>0){
+      for(let i=0;i<regList.length;i++){
+        if((userInput==regList[i].email&&passwordInput==regList[i].password)||userInput==regList[i].telefono&&passwordInput==regList[i].password){
+          regList[i].isLogged=true;
+          let logVerify=true;
+          passwordInput=undefined;
+          window.localStorage.setItem('logVerify',JSON.stringify(logVerify));
+        }
       }
     }
+
+    // const user = window.localStorage.getItem('user') || undefined;
+
+    // const isUser = user ? true : false;
+    // if(isUser){
+    //   this.user = JSON.parse(user);
+    //   if(emailI==this.user.email&&passwordI==this.user.password){
+    //     this.user.isLogged=true;
+    //     window.localStorage.setItem('user',JSON.stringify(this.user));
+    //   }
+    //   else{
+    //     this.user.isLogged=false;
+    //   }
+    // }
        
     // const passKey = "hey";
     // console.log(user.password);
@@ -40,17 +57,37 @@ export class AuthService {
   // }
 
   isLogged() {
-    const user = window.localStorage.getItem('user') || undefined;
 
-    var logear= user ? true : false;
+    var isLoggedIn= window.localStorage.getItem('logVerify') || undefined;
+
+    let logear= isLoggedIn ? true : false;
 
     if(logear){
-      this.user = JSON.parse(user);
-      if(this.user.isLogged){
-        return this.user.isLogged;
-      }
+      return true;
     }
     return false;
+    
+
+    // if(this.regList.length>0){
+    //   for(let i=0;i<this.regList.length;i++){
+    //     if(this.regList[i].isLogged){
+    //       return true;
+    //     }
+    //   }
+    //   return false;
+    // }
+
+    // const user = window.localStorage.getItem('user') || undefined;
+
+    // // var logear= user ? true : false;
+
+    // if(logear){
+    //   this.user = JSON.parse(user);
+    //   if(this.user.isLogged){
+    //     return this.user.isLogged;
+    //   }
+    // }
+    // return false;
   }
 
   logout() {

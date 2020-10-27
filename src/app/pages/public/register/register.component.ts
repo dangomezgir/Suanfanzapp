@@ -31,24 +31,34 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {
     this.regList = this.registerService.getRegister();
     console.log(this.regList);
+    for(let i=0;i<this.regList.length;i++){
+      this.regList[i].isLogged=false;
+    }
+    console.log(this.regList);
   }
 
   doRegister(e) {
     e.preventDefault();
 
     let emailExist = false;
-    console.log('email existe?1 '+emailExist);
+    let telefonoExist=false;
+    // console.log('email existe?1 '+emailExist);
     if (this.userForm.status == "INVALID") {
       console.log("nonas pri");
     } else {
       for(let i = 0; i<this.regList.length; i++){
-
+        if(this.userForm.controls.telefono.value === this.regList[i].telefono){
+          telefonoExist = true;
+        }
         if(this.userForm.controls.email.value === this.regList[i].email){
           emailExist = true;
         }
       }
       if(emailExist){
         console.log("El email ya existe");
+      }
+      if(telefonoExist){
+        console.log("El telefono ya existe");
       }
       else{
         
@@ -64,7 +74,7 @@ export class RegisterComponent implements OnInit {
           this.dbRef.push(user);
           this.regList.push(user);
           user.password = undefined;
-          window.localStorage.setItem('user', JSON.stringify(user));
+          // window.localStorage.setItem('user', JSON.stringify(user));
         }
         else {
           console.log("nonas pri, las contraseñas loco");

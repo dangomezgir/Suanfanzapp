@@ -4,6 +4,7 @@ import { AuthService } from 'src/app/shared/services/auth.service';
 import { ChatService } from 'src/app/shared/services/chat/chat.service';
 import { ChatI } from './interfaces/ChatI';
 import { MessageI } from './interfaces/MessageI';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -56,7 +57,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     msgs: []
   };
 
-  constructor(public authService: AuthService, public chatService: ChatService) {}
+  constructor(private router:Router, public authService: AuthService, public chatService: ChatService) {}
 
   ngOnInit(): void {
     this.initChat();
@@ -67,6 +68,12 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.chatService.disconnect();
   }
 
+  logOut(){
+    console.log("logOut");
+    window.localStorage.clear();
+    this.router.navigate(['/login']);
+  }
+  
   initChat() {
     if (this.chats.length > 0) {
       this.currentChat.title = this.chats[0].title;
