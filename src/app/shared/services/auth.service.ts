@@ -1,5 +1,6 @@
 import { IfStmt, THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Injectable } from '@angular/core';
+import * as firebase from 'firebase';
 import { UserI } from '../interfaces/UserI';
 
 @Injectable({
@@ -8,9 +9,9 @@ import { UserI } from '../interfaces/UserI';
 export class AuthService {
 
   user: UserI | undefined;
-
+  dbRef = firebase.database().ref('/users');
   constructor() { }
-
+  
   login(emailI: string, passwordI: string) {
     const user = window.localStorage.getItem('user') || undefined;
     var isLogged=false; // user ? true : false
@@ -33,6 +34,10 @@ export class AuthService {
     //   window.localStorage.setItem('user', JSON.stringify(this.user));
     // }
   }
+
+  // async userExists(){
+  //   await 
+  // }
 
   isLogged() {
     const user = window.localStorage.getItem('user') || undefined;
