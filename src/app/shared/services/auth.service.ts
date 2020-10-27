@@ -10,12 +10,11 @@ export class AuthService {
   user: UserI | undefined;
 
   constructor() { }
-
+  
   login(emailI: string, passwordI: string) {
     const user = window.localStorage.getItem('user') || undefined;
     var isLogged=false; // user ? true : false
-    const isUser=user ? true : false;
-    if(isUser){
+    if(user){
       this.user = JSON.parse(user);
       if(emailI==this.user.email&&passwordI==this.user.password){
         this.user.isLogged=true;
@@ -36,8 +35,9 @@ export class AuthService {
 
   isLogged() {
     const user = window.localStorage.getItem('user') || undefined;
+
     var logear= user ? true : false;
-    console.log(logear);
+
     if(logear){
       this.user = JSON.parse(user);
       if(this.user.isLogged){
