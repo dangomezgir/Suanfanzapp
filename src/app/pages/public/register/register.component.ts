@@ -44,7 +44,7 @@ export class RegisterComponent implements OnInit {
     let telefonoExist=false;
     // console.log('email existe?1 '+emailExist);
     if (this.userForm.status == "INVALID") {
-      console.log("nonas pri");
+      console.log("Hubo un error en el ingreso de datos, verifique y vuelva a intentarlo");
     } else {
       for(let i = 0; i<this.regList.length; i++){
         if(this.userForm.controls.telefono.value === this.regList[i].telefono){
@@ -54,11 +54,8 @@ export class RegisterComponent implements OnInit {
           emailExist = true;
         }
       }
-      if(emailExist){
-        console.log("El email ya existe");
-      }
-      if(telefonoExist){
-        console.log("El telefono ya existe");
+      if(emailExist || telefonoExist){
+        console.log("El email o el télefono ya existen");
       }
       else{
         
@@ -72,12 +69,12 @@ export class RegisterComponent implements OnInit {
             isLogged: false
           };
           this.dbRef.push(user);
-          this.regList.push(user);
+          // this.regList.push(user);
           user.password = undefined;
           // window.localStorage.setItem('user', JSON.stringify(user));
         }
         else {
-          console.log("nonas pri, las contraseñas loco");
+          console.log("Las contraseñas ingresadas no coinciden");
         }
       }
       
