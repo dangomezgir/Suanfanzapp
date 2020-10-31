@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import * as firebase from 'firebase';
 import { UserI } from 'src/app/shared/interfaces/UserI';
 import { AuthService } from 'src/app/shared/services/auth.service';
+import { RegisterService } from 'src/app/shared/services/register/register.service';
 
 @Component({
   selector: 'app-register',
@@ -20,8 +22,11 @@ export class RegisterComponent implements OnInit {
     passwordC: new FormControl('', Validators.required),
   });
 
-  constructor(private router:Router, private authService:AuthService) { }
-  
+  dbRef = firebase.database().ref('/users');
+
+  constructor(private router: Router, private authService: AuthService, private registerService: RegisterService) { }
+
+  regList: UserI[];
 
   get emailFieldIsValid(){
     return this.userForm.controls.email.touched && this.userForm.controls.email.valid;
@@ -76,37 +81,67 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.regList = this.registerService.getRegister();
+    console.log(this.regList);
+    for(let i=0;i<this.regList.length;i++){
+      this.regList[i].isLogged=false;
+    }
+    console.log(this.regList);
   }
 
   doRegister(e) {
     e.preventDefault();
 
-    if (this.userForm.status == "INVALID")
-    {
-      alert("Revise los campos, no ha sido registrado");
-    }else{
-      if(this.userForm.controls.password.value===this.userForm.controls.passwordC.value)
-      {
-        const user: UserI = {
-          email: this.userForm.controls.email.value,
-          telefono: this.userForm.controls.telefono.value,
-          lname: this.userForm.controls.lname.value,
-          password: this.userForm.controls.password.value,
-          name: this.userForm.controls.name.value,
-          isLogged:false
-        };
-        window.localStorage.setItem('user',JSON.stringify(user));
-        user.password=undefined;
-        alert("Registrado correctamente, vuelva a la página Login");
+    let emailExist = false;
+    let telefonoExist=false;
+    // console.log('email existe?1 '+emailExist);
+    if (this.userForm.status == "INVALID") {
+      alert("Hubo un error en el ingreso de datos, verifique y vuelva a intentarlo");
+    } else {
+      for(let i = 0; i<this.regList.length; i++){
+        if(this.userForm.controls.telefono.value === this.regList[i].telefono){
+          telefonoExist = true;
+        }
+        if(this.userForm.controls.email.value === this.regList[i].email){
+          emailExist = true;
+        }
+      }
+      if(emailExist || telefonoExist){
+        alert("El email o el télefono ya existen");
       }
       else{
-        console.log("nonas pri, las contraseñas loco");
+        
+        if (this.userForm.controls.password.value === this.userForm.controls.passwordC.value) {
+          const user: UserI = {
+            email: this.userForm.controls.email.value,
+            telefono: this.userForm.controls.telefono.value,
+            lname: this.userForm.controls.lname.value,
+            password: this.userForm.controls.password.value,
+            name: this.userForm.controls.name.value,
+            isLogged: false
+          };
+          this.dbRef.push(user);
+          // this.regList.push(user);
+          user.password = undefined;
+          alert("Registrado correctamente, vuelva a la página Login");
+          // window.localStorage.setItem('user', JSON.stringify(user));
+        }
       }
+      
     }
   }
 
   goToLogin() {
     this.router.navigate(['/login']);
   }
+
+  // async checkEmail(emailExist: boolean){
+  //   await this.dbRef.orderByChild('email').equalTo(this.userForm.controls.email.value).on('child_added', snapshot => {
+  //     console.log(snapshot.key);
+  //     emailExist = true;
+  //     console.log('email existe?2 '+emailExist);
+  //   });
+  //   return emailExist
+  // }
 
 }

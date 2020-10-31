@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "suanfanzapp-cb52c": {
+      "hosting": {
+        "Suanfanzapp": [
+          "suanfanzapp-cb52c"
+        ]
+      }
+    }
+  }
+}
