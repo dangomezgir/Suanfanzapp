@@ -125,6 +125,8 @@ export class RegisterComponent implements OnInit {
           user.password = undefined;
           alert("Registrado correctamente, vuelva a la página Login");
           // window.localStorage.setItem('user', JSON.stringify(user));
+        }else{
+          alert("Las contraseñas no coinciden");
         }
       }
       
