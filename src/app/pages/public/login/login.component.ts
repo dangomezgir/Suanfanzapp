@@ -55,7 +55,7 @@ export class LoginComponent implements OnInit {
       console.log("logeado apá");
           this.router.navigate(['/home']);
     }else{
-      console.log("not logged");
+      alert("Revise los campos, no se encontro un email registrado o su contraseña no es correcta");
     }
 
     
