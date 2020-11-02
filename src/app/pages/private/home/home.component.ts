@@ -20,46 +20,17 @@ export class HomeComponent implements OnInit, OnDestroy {
       connection: undefined,
       msgs: undefined
   };
+  icon: string;
+  chats: Array<ChatI> = [];
 
-  chats: Array<ChatI> = [
-    {
-      title: "Santi",
-      icon: "/assets/img/ppRightBar.png",
-      isRead: true,
-      msgPreview: "entonces ando usando fotos reales hahaha",
-      lastMsg: "11:13",
-      telefono: "+1516515131",
-      email: "tuhermana@algo.com",
-      msgs: [
-        {content: "Lorem ipsum dolor amet", isRead:true, isMe:true, time:"7:24"},
-        {content: "Qué?", isRead:true, isMe:false, time:"7:25"},
-      ]
-    },
-    {
-      title: "Pablo Bejarano",
-      icon: "/assets/img/ppInbox.png",
-      isRead: true,
-      msgPreview: "Estrenando componente",
-      lastMsg: "18:30",
-      telefono: "+555555555",
-      email: "shjfkg@hjsdfb.com",
-      msgs: []
-    },
-    {
-      title: "Pablo Bejarano 2",
-      icon: "/assets/img/ppInbox.png",
-      isRead: true,
-      telefono: "+853691592026",
-      email: "ojfsgnasfg@fjgndkfjgn.com",
-      msgPreview: "Nice front 😎",
-      lastMsg: "23:30",
-      msgs: []
-    },
-  ];
+  currentChat: ChatI;
 
-  currentChat = this.chats[0];
-
-  constructor(private router:Router, public authService: AuthService, public chatService: ChatService) {}
+  constructor(private router:Router, public authService: AuthService, public chatService: ChatService) {
+    chatService.processContacts();
+    chatService.getInitialMessages().then(snapshot => {
+      this.chats = chatService.processInitialMessages(snapshot);
+    });
+  }
 
   ngOnInit(): void {
     this.initChat();
@@ -77,10 +48,23 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
   
   initChat() {
+    let loggedUser = JSON.parse(window.localStorage.getItem('user'));
+    loggedUser.icon = '/assets/img/patricio.jpg'
+    this.icon = loggedUser.icon;
     if (this.chats.length > 0) {
-      this.currentChat.title = this.chats[0].title;
-      this.currentChat.icon = this.chats[0].icon;
-      this.currentChat.msgs = this.chats[0].msgs;
+      this.currentChat = this.chats[0];
+    }else{
+      this.currentChat = {
+        title: '',
+        icon: '',
+        msgPreview: '',
+        isRead: false,
+        lastMsg: '',
+        msgs: [],
+        telefonos: [],
+        emails: [],
+        isGroup: false
+        }
     }
     this.subscriptionList.connection = this.chatService.connect().subscribe(_ => {
       console.log("Nos conectamos");
