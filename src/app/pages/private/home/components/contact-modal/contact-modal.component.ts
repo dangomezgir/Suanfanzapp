@@ -17,6 +17,6 @@ export class ContactModalComponent implements OnInit {
   }
 
   cancel(){ this.onClose.emit(null); }
-  contactInput(){ this.onClose.emit(this.contactInfo); }
+  addContact(){ this.onClose.emit(this.contactInfo); }
 
 }
