@@ -14,12 +14,12 @@ import { RegisterService } from 'src/app/shared/services/register/register.servi
 export class RegisterComponent implements OnInit {
 
   userForm = new FormGroup({
-    email: new FormControl('', Validators.compose([Validators.email,Validators.required])),
-    telefono: new FormControl('',Validators.compose([Validators.pattern(/^[+]+[0-9]+$/),Validators.required])),
-    name: new FormControl('', Validators.compose([Validators.pattern(/^[a-zA-Z ]+$/),Validators.required])),
-    lname: new FormControl('', Validators.compose([Validators.pattern(/^[a-zA-Z ]+$/),Validators.required])),
-    password: new FormControl('', Validators.compose([Validators.minLength(8),Validators.required])),
-    passwordC: new FormControl('', Validators.required),
+    email: new FormControl('', Validators.compose([Validators.email, Validators.required])),
+    telefono: new FormControl('', Validators.compose([Validators.pattern(/^[+]+[0-9]+$/), Validators.required, Validators.minLength(9)])),
+    name: new FormControl('', Validators.compose([Validators.pattern(/^[a-zA-Z ]+$/), Validators.required])),
+    lname: new FormControl('', Validators.compose([Validators.pattern(/^[a-zA-Z ]+$/), Validators.required])),
+    password: new FormControl('', Validators.compose([Validators.minLength(8), Validators.required])),
+    passwordC: new FormControl('', Validators.compose([Validators.minLength(8), Validators.required])),
   });
 
   dbRef = firebase.database().ref('/users');
@@ -96,7 +96,8 @@ export class RegisterComponent implements OnInit {
     let telefonoExist=false;
     // console.log('email existe?1 '+emailExist);
     if (this.userForm.status == "INVALID") {
-      alert("Hubo un error en el ingreso de datos, verifique y vuelva a intentarlo");
+      alert("Revise los campos, no ha sido registrado");
+      console.log("nonas pri");
     } else {
       for(let i = 0; i<this.regList.length; i++){
         if(this.userForm.controls.telefono.value === this.regList[i].telefono){
@@ -108,6 +109,7 @@ export class RegisterComponent implements OnInit {
       }
       if(emailExist || telefonoExist){
         alert("El email o el télefono ya existen");
+        console.log("El email o el télefono ya existen");
       }
       else{
         
@@ -118,15 +120,18 @@ export class RegisterComponent implements OnInit {
             lname: this.userForm.controls.lname.value,
             password: this.userForm.controls.password.value,
             name: this.userForm.controls.name.value,
-            isLogged: false
+            isLogged: false,
+            contacts: [],
+            icon: "/assets/img/defaultPP.jpg"
           };
           this.dbRef.push(user);
           // this.regList.push(user);
           user.password = undefined;
           alert("Registrado correctamente, vuelva a la página Login");
-          // window.localStorage.setItem('user', JSON.stringify(user));
-        }else{
+        }
+        else {
           alert("Las contraseñas no coinciden");
+          console.log("Las contraseñas ingresadas no coinciden");
         }
       }
       

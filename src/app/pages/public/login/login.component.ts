@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit {
     const isLogged = this.authService.isLogged();
     passwordI=undefined;
     // this.loginForm.controls.password.disable();
-    this.regList=undefined;
+    // this.regList=undefined;
     if(isLogged){
       console.log("logeado apá");
           this.router.navigate(['/home']);
