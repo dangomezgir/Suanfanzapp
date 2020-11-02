@@ -5,6 +5,8 @@ import { ChatService } from 'src/app/shared/services/chat/chat.service';
 import { ChatI } from './interfaces/ChatI';
 import { MessageI } from './interfaces/MessageI';
 import { Router } from '@angular/router';
+import { RegisterService } from 'src/app/shared/services/register/register.service';
+import { UserI } from 'src/app/shared/interfaces/UserI';
 
 @Component({
   selector: 'app-home',
@@ -12,6 +14,10 @@ import { Router } from '@angular/router';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit, OnDestroy {
+
+  showModal: boolean = false;
+
+  contactInfo: string = '';
 
   subscriptionList: {
     connection: Subscription,
@@ -25,7 +31,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   currentChat: ChatI;
 
-  constructor(private router:Router, public authService: AuthService, public chatService: ChatService) {
+  reglist: UserI[];
+
+  constructor(private router:Router, public authService: AuthService, public chatService: ChatService, private registerService: RegisterService) {
     chatService.processContacts();
     chatService.getInitialMessages().then(snapshot => {
       this.chats = chatService.processInitialMessages(snapshot);
@@ -34,6 +42,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.initChat();
+    this.reglist = this.registerService.getRegister();
   }
 
   ngOnDestroy(): void {
@@ -87,6 +96,37 @@ export class HomeComponent implements OnInit, OnDestroy {
       if (this.subscriptionList[key] && exceptList.indexOf(key) === -1) {
         this.subscriptionList[key].unsubscribe();
       }
+    }
+  }
+
+  openModal(){
+    this.showModal = true;
+  }
+
+  addContact(contactInfo){
+    this.showModal = false;
+    let contactExist = false;
+    let user = JSON.parse(window.localStorage.getItem('user'));
+    if(contactInfo){
+      // alert(contactInfo);
+      for(let i = 0; i<this.reglist.length; i++){
+        if(this.reglist[i].email === contactInfo || this.reglist[i].telefono === contactInfo){
+          contactExist = true;
+          let newContact: ChatI = {
+            title: this.reglist[i].name,
+            emails: [user.email ,this.reglist[i].email],
+            icon: "./assets/img/default.png",
+            isRead: false,
+            lastMsg: "",
+            msgPreview: "",
+            msgs: [],
+            telefonos: [user.telefono ,this.reglist[i].telefono],
+            isGroup: false
+          }
+          this.chats.push(newContact);
+        }
+      }
+      if(!contactExist)alert("El número de telefono o email no corresponde al de un usuario registrado.")
     }
   }
 

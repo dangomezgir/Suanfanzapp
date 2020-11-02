@@ -1,0 +1,26 @@
+<div class="modal is-active">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title">Añadir contacto</p>
+            <button class="delete" aria-label="close" (click)="cancel()"></button>
+        </header>
+        <section class="modal-card-body">
+
+            <!-- <div class="select">
+                <select name="selected" [(ngModel)]="selected">
+                    <option value="">Select a item</option>
+                    <option value="Item 1">Item 1</option>
+                    <option value="Item 2">Item 2</option>
+                </select>
+            </div> -->
+            <div class="contact">
+                <span>Teléfono o email: </span><input type="text" name="contactInfo" id="contact" [(ngModel)]="contactInfo">
+            </div>
+        </section>
+        <footer class="modal-card-foot">
+            <button class="button is-success" (click)="addContact()">Save changes</button>
+            <button class="button" (click)="cancel()">Cancel</button>
+        </footer>
+    </div>
+</div>

@@ -107,11 +107,8 @@ export class RegisterComponent implements OnInit {
           emailExist = true;
         }
       }
-      if(emailExist){
-        console.log("El email ya existe");
-      }
-      if(telefonoExist){
-        console.log("El telefono ya existe");
+      if(emailExist || telefonoExist){
+        console.log("El email o el télefono ya existen");
       }
       else{
         
@@ -127,13 +124,13 @@ export class RegisterComponent implements OnInit {
             icon: "/assets/img/defaultPP.jpg"
           };
           this.dbRef.push(user);
-          this.regList.push(user);
+          // this.regList.push(user);
           user.password = undefined;
           // window.localStorage.setItem('user', JSON.stringify(user));
           alert("Registrado correctamente, vuelva a la página Login");
         }
         else {
-          console.log("nonas pri, las contraseñas loco");
+          console.log("Las contraseñas ingresadas no coinciden");
         }
       }
       

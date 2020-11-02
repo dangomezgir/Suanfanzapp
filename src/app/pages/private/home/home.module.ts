@@ -4,6 +4,7 @@ import { HomeComponent } from './home.component';
 import { InboxChatComponent } from './components/inbox-chat/inbox-chat.component';
 import { ChatAreaComponent } from './components/chat-area/chat-area.component';
 import { ChatMessageComponent } from './components/chat-message/chat-message.component';
+import { ContactModalComponent } from './components/contact-modal/contact-modal.component';
 import { FormsModule } from '@angular/forms';
 
 
@@ -12,7 +13,8 @@ import { FormsModule } from '@angular/forms';
     HomeComponent,
     InboxChatComponent,
     ChatAreaComponent,
-    ChatMessageComponent
+    ChatMessageComponent,
+    ContactModalComponent
   ],
   imports: [
     CommonModule, FormsModule
