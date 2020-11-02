@@ -3,7 +3,7 @@
         <div class="topBarLeft">
             <div class="tbLeftContainer">
                 <div class="profileContainer">
-                    <img class="profile" src="/assets/img/pp.png" alt="" srcset="">
+                    <img class="profile" [src]="icon" alt="" srcset="">
                 </div>
                 <div class="leftRightIcons">
                     <div class="statusContainer">
@@ -35,7 +35,7 @@
         </div>
     </div>
     <div class="rightBigContainer">
-        <app-chat-area [title]="currentChat.title" [icon]="currentChat.icon" [msgs]="currentChat.msgs" [user]="currentChat"></app-chat-area>
+        <app-chat-area [title]="currentChat.title" [icon]="currentChat.icon" [msgs]="currentChat.msgs" [chatInfo]="currentChat"></app-chat-area>
     </div>
     <div>
         <app-contact-modal [contactInfo]="contactInfo" *ngIf="showModal" (onClose)="addContact($event)"></app-contact-modal>

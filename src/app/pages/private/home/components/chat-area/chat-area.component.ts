@@ -12,7 +12,7 @@ export class ChatAreaComponent implements OnInit {
   @Input() title: string = ""
   @Input() icon: string = ""
   @Input() msgs: Array<MessageI> = []
-  @Input() user: Object
+  @Input() chatInfo: Object
 
   msg: string;
 
@@ -28,7 +28,7 @@ export class ChatAreaComponent implements OnInit {
       time: "8:58",
       isRead: false,
     }
-    this.chatService.sendMsg(msg, this.user);
+    this.chatService.sendMsg(msg, this.chatInfo);
     this.msg = "";
   }
 }

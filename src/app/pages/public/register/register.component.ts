@@ -15,7 +15,7 @@ export class RegisterComponent implements OnInit {
 
   userForm = new FormGroup({
     email: new FormControl('', Validators.compose([Validators.email, Validators.required])),
-    telefono: new FormControl('', Validators.compose([Validators.pattern(/^[+]+[1-9]+$/), Validators.required, Validators.minLength(9)])),
+    telefono: new FormControl('', Validators.compose([Validators.pattern(/^[+]+[0-9]+$/), Validators.required, Validators.minLength(9)])),
     name: new FormControl('', Validators.compose([Validators.pattern(/^[a-zA-Z ]+$/), Validators.required])),
     lname: new FormControl('', Validators.compose([Validators.pattern(/^[a-zA-Z ]+$/), Validators.required])),
     password: new FormControl('', Validators.compose([Validators.minLength(8), Validators.required])),
@@ -119,7 +119,9 @@ export class RegisterComponent implements OnInit {
             lname: this.userForm.controls.lname.value,
             password: this.userForm.controls.password.value,
             name: this.userForm.controls.name.value,
-            isLogged: false
+            isLogged: false,
+            contacts: [],
+            icon: "/assets/img/defaultPP.jpg"
           };
           this.dbRef.push(user);
           // this.regList.push(user);
