@@ -28,6 +28,58 @@ export class RegisterComponent implements OnInit {
 
   regList: UserI[];
 
+  get emailFieldIsValid(){
+    return this.userForm.controls.email.touched && this.userForm.controls.email.valid;
+  }
+
+  get emailFieldIsinValid(){
+    return this.userForm.controls.email.touched && this.userForm.controls.email.invalid;
+  }
+
+  get phoneFieldIsValid(){
+    return this.userForm.controls.telefono.touched && this.userForm.controls.telefono.valid;
+  }
+
+  get phoneFieldIsinValid(){
+    return this.userForm.controls.telefono.touched && this.userForm.controls.telefono.invalid;
+  }
+
+  get passFieldIsValid(){
+    return this.userForm.controls.password.touched && this.userForm.controls.password.valid;
+  }
+
+  get passFieldIsinValid(){
+    return this.userForm.controls.password.touched && this.userForm.controls.password.invalid;
+  }
+
+  get passcFieldIsValid(){
+    if (this.userForm.controls.password.value===this.userForm.controls.passwordC.value){
+      return this.userForm.controls.passwordC.touched && this.userForm.controls.passwordC.valid;
+    }
+  }
+
+  get passcFieldIsinValid(){
+    if(this.userForm.controls.password.value!=this.userForm.controls.passwordC.value){
+      return this.userForm.controls.passwordC.touched && this.userForm.controls.passwordC.invalid;
+    }
+  }
+
+  get nameFieldIsValid(){
+    return this.userForm.controls.name.touched && this.userForm.controls.name.valid;
+  }
+
+  get nameFieldIsinValid(){
+    return this.userForm.controls.name.touched && this.userForm.controls.name.invalid;
+  }
+
+  get lnameFieldIsValid(){
+    return this.userForm.controls.lname.touched && this.userForm.controls.lname.valid;
+  }
+
+  get lnameFieldIsinValid(){
+    return this.userForm.controls.lname.touched && this.userForm.controls.lname.invalid;
+  }
+
   ngOnInit(): void {
     this.regList = this.registerService.getRegister();
     console.log(this.regList);
@@ -44,7 +96,8 @@ export class RegisterComponent implements OnInit {
     let telefonoExist=false;
     // console.log('email existe?1 '+emailExist);
     if (this.userForm.status == "INVALID") {
-      console.log("Hubo un error en el ingreso de datos, verifique y vuelva a intentarlo");
+      alert("Revise los campos, no ha sido registrado");
+      console.log("nonas pri");
     } else {
       for(let i = 0; i<this.regList.length; i++){
         if(this.userForm.controls.telefono.value === this.regList[i].telefono){
@@ -72,6 +125,7 @@ export class RegisterComponent implements OnInit {
           // this.regList.push(user);
           user.password = undefined;
           // window.localStorage.setItem('user', JSON.stringify(user));
+          alert("Registrado correctamente, vuelva a la página Login");
         }
         else {
           console.log("Las contraseñas ingresadas no coinciden");

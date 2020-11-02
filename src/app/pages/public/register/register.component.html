@@ -18,56 +18,158 @@
         <div class="content">
           <form [formGroup]="userForm">
             <div class="field">
-              <p class="control has-icons-left has-icons-right">
-                <input class="input" type="email" formControlName="email"  placeholder="Email" [value]="userForm.controls.email.value" >
+              <div class="control has-icons-left has-icons-right">
+                <input class="input" [class.is-danger]="emailFieldIsinValid" [class.is-success]="emailFieldIsValid" type="email" formControlName="email"  placeholder="Email" [value]="userForm.controls.email.value" >
                 <span class="icon is-small is-left">
-                  <i class="fas fa-envelope"></i>
+                  <i class="fas fa-at"></i>
                 </span>
-                <span class="icon is-small is-right">
-                  <i class="fas fa-check"></i>
+                <span *ngIf="emailFieldIsinValid; else elseEmailField" class="icon is-small is-right">
+                  <i class="fas fa-times"></i>
                 </span>
-              </p>
+                <ng-template #elseEmailField>
+                  <span class="icon is-small is-right">
+                    <i class="fas fa-check"></i>
+                  </span>
+                </ng-template>
+              </div>
+              <div *ngIf="emailFieldIsinValid">
+                <p class="help is-danger" *ngIf="userForm.controls.email.hasError('required')">
+                  Es un campo requerido
+                </p>
+                <p class="help is-danger" *ngIf="userForm.controls.email.hasError('email')">
+                  No es un email
+                </p>
+              </div>
             </div>
             <div class="field">
-              <p class="control has-icons-left">
-                <input class="input" formControlName="telefono" [value]="userForm.controls.telefono.value" type="text"
-                  placeholder="Telefono">
+              <div class="control has-icons-left has-icons-right">
+                <input class="input" [class.is-danger]="phoneFieldIsinValid" [class.is-success]="phoneFieldIsValid" formControlName="telefono" [value]="userForm.controls.telefono.value" type="text" placeholder="Telefono">
+                <span class="icon is-small is-left">
+                  <i class="fas fa-phone"></i>
+                </span>
+                <span *ngIf="phoneFieldIsinValid; else elsePhoneField" class="icon is-small is-right">
+                  <i class="fas fa-times"></i>
+                </span>
+                <ng-template #elsePhoneField>
+                  <span class="icon is-small is-right">
+                    <i class="fas fa-check"></i>
+                  </span>
+                </ng-template>
+              </div>
+              <div *ngIf="phoneFieldIsinValid">
+                <p class="help is-danger" *ngIf="userForm.controls.telefono.hasError('required'); else minPhone">
+                  Es un campo requerido
+                </p>
+                <ng-template #minPhone>
+                  <p class="help is-danger">
+                    No es un número telefonico, asegurese de comenzar con un prefijo de su localidad +
+                  </p>
+                </ng-template>
+              </div>
+            </div>
+            <div class="field">
+              <div class="control has-icons-left has-icons-right">
+                <input class="input" [class.is-danger]="passFieldIsinValid" [class.is-success]="passFieldIsValid" type="password" formControlName="password" placeholder="Password">
                 <span class="icon is-small is-left">
                   <i class="fas fa-lock"></i>
                 </span>
-              </p>
+                <span *ngIf="passFieldIsinValid; else elsePassField" class="icon is-small is-right">
+                  <i class="fas fa-times"></i>
+                </span>
+                <ng-template #elsePassField>
+                  <span class="icon is-small is-right">
+                    <i class="fas fa-check"></i>
+                  </span>
+                </ng-template>
+              </div>
+              <div *ngIf="passFieldIsinValid">
+                <p class="help is-danger" *ngIf="userForm.controls.password.hasError('required'); else minPass">
+                  Es un campo requerido
+                </p>
+                <ng-template #minPass>
+                  <p class="help is-danger">
+                    Minimo 8 caracteres
+                  </p>
+                </ng-template>
+              </div>
             </div>
             <div class="field">
-              <p class="control has-icons-left">
-                <input class="input" type="password" formControlName="password" placeholder="Password">
+              <div class="control has-icons-left has-icons-right">
+                <input class="input" [class.is-danger]="passcFieldIsinValid" [class.is-success]="passcFieldIsValid" type="password" formControlName="passwordC" placeholder="Confirm Password">
                 <span class="icon is-small is-left">
                   <i class="fas fa-lock"></i>
                 </span>
-              </p>
+                <span *ngIf="passcFieldIsinValid; else elsePasscField" class="icon is-small is-right">
+                  <i class="fas fa-times"></i>
+                </span>
+                <ng-template #elsePasscField>
+                  <span class="icon is-small is-right">
+                    <i class="fas fa-check"></i>
+                  </span>
+                </ng-template>
+              </div>
+              <div *ngIf="passcFieldIsinValid">
+                <p class="help is-danger" *ngIf="userForm.controls.passwordC.hasError('required')">
+                  Es un campo requerido
+                </p>
+              </div>
+              <div *ngIf="passcFieldIsValid">
+                <p class="help is-success">
+                  Contraseñas coinciden
+                </p>
+              </div>
             </div>
             <div class="field">
-              <p class="control has-icons-left">
-                <input class="input" type="password" formControlName="passwordC" placeholder="Confirm Password">
+              <div class="control has-icons-left has-icons-right">
+                <input class="input" [class.is-danger]="nameFieldIsinValid" [class.is-success]="nameFieldIsValid" formControlName="name" type="text" placeholder="Name">
                 <span class="icon is-small is-left">
-                  <i class="fas fa-lock"></i>
+                  <i class="fas fa-signature"></i>
                 </span>
-              </p>
+                <span *ngIf="nameFieldIsinValid; else elsenameField" class="icon is-small is-right">
+                  <i class="fas fa-times"></i>
+                </span>
+                <ng-template #elsenameField>
+                  <span class="icon is-small is-right">
+                    <i class="fas fa-check"></i>
+                  </span>
+                </ng-template>
+              </div>
+              <div *ngIf="nameFieldIsinValid">
+                <p class="help is-danger" *ngIf="userForm.controls.name.hasError('required'); else minName">
+                  Es un campo requerido
+                </p>
+                <ng-template #minName>
+                  <p class="help is-danger">
+                    No se aceptan números o caracteres especiales
+                  </p>
+                </ng-template>
+              </div>
             </div>
             <div class="field">
-              <p class="control has-icons-left">
-                <input class="input" formControlName="name" type="text" placeholder="Name">
+              <div class="control has-icons-left has-icons-right">
+                <input class="input" [class.is-danger]="lnameFieldIsinValid" [class.is-success]="lnameFieldIsValid" formControlName="lname" type="text" placeholder="Last Name">
                 <span class="icon is-small is-left">
-                  <i class="fas fa-lock"></i>
+                  <i class="fas fa-signature"></i>
                 </span>
-              </p>
-            </div>
-            <div class="field">
-              <p class="control has-icons-left">
-                <input class="input" formControlName="lname" type="text" placeholder="Last Name">
-                <span class="icon is-small is-left">
-                  <i class="fas fa-lock"></i>
+                <span *ngIf="lnameFieldIsinValid; else elselnameField" class="icon is-small is-right">
+                  <i class="fas fa-times"></i>
                 </span>
-              </p>
+                <ng-template #elselnameField>
+                  <span class="icon is-small is-right">
+                    <i class="fas fa-check"></i>
+                  </span>
+                </ng-template>
+              </div>
+              <div *ngIf="lnameFieldIsinValid">
+                <p class="help is-danger" *ngIf="userForm.controls.lname.hasError('required'); else minlName">
+                  Es un campo requerido
+                </p>
+                <ng-template #minlName>
+                  <p class="help is-danger">
+                    No se aceptan números o caracteres especiales
+                  </p>
+                </ng-template>
+              </div>
             </div>
 
             <div class="field">

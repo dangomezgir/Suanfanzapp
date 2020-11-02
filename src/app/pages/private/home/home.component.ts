@@ -13,6 +13,10 @@ import { Router } from '@angular/router';
 })
 export class HomeComponent implements OnInit, OnDestroy {
 
+  showModal: boolean = false;
+
+  contactInfo: string = '';
+
   subscriptionList: {
     connection: Subscription,
     msgs: Subscription
@@ -104,6 +108,17 @@ export class HomeComponent implements OnInit, OnDestroy {
       if (this.subscriptionList[key] && exceptList.indexOf(key) === -1) {
         this.subscriptionList[key].unsubscribe();
       }
+    }
+  }
+
+  onAddContact(){
+    this.showModal = true;
+  }
+
+  contactInput(contactInfo){
+    this.showModal = false;
+    if(contactInfo){
+      alert(contactInfo);
     }
   }
 
