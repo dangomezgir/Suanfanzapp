@@ -7,4 +7,6 @@ export interface ChatI{
     isRead: boolean
     lastMsg: string
     msgs: Array<MessageI>
+    telefono: string
+    email: string
 }
