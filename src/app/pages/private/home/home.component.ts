@@ -28,6 +28,8 @@ export class HomeComponent implements OnInit, OnDestroy {
       isRead: true,
       msgPreview: "entonces ando usando fotos reales hahaha",
       lastMsg: "11:13",
+      telefono: "+1516515131",
+      email: "tuhermana@algo.com",
       msgs: [
         {content: "Lorem ipsum dolor amet", isRead:true, isMe:true, time:"7:24"},
         {content: "Qué?", isRead:true, isMe:false, time:"7:25"},
@@ -39,23 +41,23 @@ export class HomeComponent implements OnInit, OnDestroy {
       isRead: true,
       msgPreview: "Estrenando componente",
       lastMsg: "18:30",
+      telefono: "+555555555",
+      email: "shjfkg@hjsdfb.com",
       msgs: []
     },
     {
       title: "Pablo Bejarano 2",
       icon: "/assets/img/ppInbox.png",
       isRead: true,
+      telefono: "+853691592026",
+      email: "ojfsgnasfg@fjgndkfjgn.com",
       msgPreview: "Nice front 😎",
       lastMsg: "23:30",
       msgs: []
     },
   ];
 
-  currentChat = {
-    title: "",
-    icon: "",
-    msgs: []
-  };
+  currentChat = this.chats[0];
 
   constructor(private router:Router, public authService: AuthService, public chatService: ChatService) {}
 
@@ -90,9 +92,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   onSelectInbox(index: number) {
-    this.currentChat.title = this.chats[index].title;
-      this.currentChat.icon = this.chats[index].icon;
-      this.currentChat.msgs = this.chats[index].msgs;
+    this.currentChat = this.chats[index];
   }
 
   doLogout() {

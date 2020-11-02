@@ -14,7 +14,7 @@ export class ChatService {
 
   connect() {
     return new Observable(observer => {
-      this.socket = io('https://suanfanzapp.loca.lt');
+      this.socket = io('http://192.168.0.23:3000');
       this.socket.on('connect', () => {
         observer.next();
       })
@@ -24,13 +24,17 @@ export class ChatService {
   getNewMsgs() {
     return new Observable(observer => {
       this.socket.on("newMsg", msg => {
-        observer.next(msg);
+        let user = JSON.parse(window.localStorage.getItem("user"));
+        if(msg.toUser.telefono == user.telefono || msg.user.telefono == user.telefono){
+          observer.next(msg.msg);
+        }
       });
     });
   }
 
-  sendMsg(msg: MessageI) {
-    this.socket.emit('newMsg', msg);
+  sendMsg(msg: MessageI, toUser: object) {
+    let user = JSON.parse(window.localStorage.getItem('user'));
+    this.socket.emit('newMsg', {msg, user, toUser});
   }
 
   disconnect() {
