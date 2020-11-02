@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ChatService } from 'src/app/shared/services/chat/chat.service';
 import { MessageI } from '../../interfaces/MessageI';
+import {InboxChatComponent} from '../../components/inbox-chat/inbox-chat.component';
 
 @Component({
   selector: 'app-chat-area',
@@ -16,7 +17,7 @@ export class ChatAreaComponent implements OnInit {
 
   msg: string;
 
-  constructor(public chatService: ChatService) { }
+  constructor(public chatService: ChatService, public inboxChatComponent: InboxChatComponent) { }
 
   ngOnInit(): void {
   }
@@ -25,10 +26,11 @@ export class ChatAreaComponent implements OnInit {
     const msg: MessageI = {
       content: this.msg,
       isMe: true,
-      time: "8:58",
+      time: new Date(),
       isRead: false,
     }
     this.chatService.sendMsg(msg, this.chatInfo);
+    this.inboxChatComponent.sendMsg(msg);
     this.msg = "";
   }
 }

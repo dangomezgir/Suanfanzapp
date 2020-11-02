@@ -8,7 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
 export class ChatMessageComponent implements OnInit {
 
   @Input() content: string
-  @Input() time: string
+  @Input() time: Date = new Date();
   @Input() isMe: boolean
   @Input() isRead: boolean
 

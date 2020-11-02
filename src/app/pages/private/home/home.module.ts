@@ -19,5 +19,8 @@ import { FormsModule } from '@angular/forms';
   imports: [
     CommonModule, FormsModule
   ],
+  exports: [
+    InboxChatComponent, ChatAreaComponent, ChatMessageComponent
+  ],
 })
 export class HomeModule { }

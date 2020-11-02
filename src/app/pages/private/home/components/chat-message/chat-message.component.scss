@@ -42,6 +42,7 @@ $titleFont: sfProTextMedium;
         max-width: 65%;
         display: flex;
         align-items: center;
+        justify-content: space-between;
         font-size: 14.2px;
         font-family: $titleFont;
         background: #DBF8C6;
@@ -70,12 +71,11 @@ $titleFont: sfProTextMedium;
         flex-grow: .1;
     }
     .messageTimeChat{
-        position: absolute;
+        position: relative;
         display: flex;
         align-self: flex-end;
         font-size: 11px;
         color: #C1C1C1;
-        left: 54.5%;
     }
     .leftTail {
         position: absolute;
@@ -85,6 +85,7 @@ $titleFont: sfProTextMedium;
         max-width: 65%;
         display: flex;
         align-items: center;
+        justify-content: space-between;
         font-size: 14.2px;
         font-family: $titleFont;
         background: white;
