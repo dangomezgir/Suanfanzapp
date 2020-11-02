@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ChatService } from 'src/app/shared/services/chat/chat.service';
+import { ChatI } from '../../interfaces/ChatI';
 import { MessageI } from '../../interfaces/MessageI';
 
 @Component({
@@ -12,7 +13,7 @@ export class ChatAreaComponent implements OnInit {
   @Input() title: string = ""
   @Input() icon: string = ""
   @Input() msgs: Array<MessageI> = []
-  @Input() chatInfo: Object
+  @Input() chatInfo: ChatI
 
   msg: string;
 

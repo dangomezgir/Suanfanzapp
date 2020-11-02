@@ -13,7 +13,7 @@ export class ChatService {
 
   socket: any;
   dbRef: any;
-
+  
   constructor() { 
     this.dbRef =firebase.database().ref('messages');
   }
@@ -30,23 +30,32 @@ export class ChatService {
   getNewMsgs() {
     return new Observable(observer => {
       this.socket.on("newMsg", msg => {
-        let user = JSON.parse(window.localStorage.getItem("user"));
         let receiver = this.verifyMessage(msg);
-        if(receiver){
+        if(receiver.acceptMessage || receiver.imSender){
+          if(receiver.acceptMessage){
+              msg.msg.isMe = false;
+          }
           observer.next(msg.msg);
         }
       });
     });
   }
 
-  verifyMessage(msg):boolean{
+  verifyMessage(msg){
     let user = JSON.parse(window.localStorage.getItem("user"));
-    let receiverPhone = msg.toUser.telefonos.find(telf => telf == user.telefono);
-    let receiverEmail = msg.toUser.emails.find(email => email == user.email);
-    return receiverPhone || receiverEmail || msg.user.telefono == user.telefono || msg.user.email == user.email;
+    let receiverPhone = msg.toUser.telefonos.find(telf => telf == user.telefono &&  telf != msg.user.telefono);
+    let receiverEmail = msg.toUser.emails.find(email => email == user.email && email != msg.user.email);
+    return {
+      acceptMessage: receiverPhone || receiverEmail ,
+      imSender: msg.user.email == user.email || msg.user.telefono == user.telefono
+    };
   }
-  sendMsg(msg: MessageI, toUser: object) {
+  sendMsg(msg: MessageI, toUser: ChatI) {
     let user = JSON.parse(window.localStorage.getItem('user'));
+    let updateRef = firebase.database().ref(`messages`).child(toUser.chatKey).child('msgs');
+    let date = new Date();
+    let time = `${date.getHours()}:${date.getMinutes()}`;
+    updateRef.push({content: msg.content,isRead: false, sender: user.telefono, time})
     this.socket.emit('newMsg', {msg, user, toUser});
   }
 
@@ -79,7 +88,9 @@ export class ChatService {
   processInitialMessages (snapshot){
     let dbData = []
     Object.keys(snapshot.val()).forEach(element => {
-        dbData.push(snapshot.val()[element])
+        let data = snapshot.val()[element];
+        data.chatKey = element
+        dbData.push(data)
     }); 
     
     let loggedUser = JSON.parse(window.localStorage.getItem('user'));
@@ -88,7 +99,6 @@ export class ChatService {
     })
     let myMessagges = [];
     dbData.forEach(messagge => {
-      console.log("Entra")
         let title = "";
         let icon = "";
         if(messagge.isGroup){
@@ -104,26 +114,34 @@ export class ChatService {
             icon = "/assets/img/defaultPP.png";
           }
         }
+        let messages = []
+        
+        Object.keys(messagge.msgs).forEach(key => {
+          let data = messagge.msgs[key];
+          messages.push(data)
+        }); 
         let processedMessages = [];
-        messagge.msgs.forEach(msg => {
+        messages.forEach(msg => {
             processedMessages.push({
               content: msg.content,
               isRead: msg.isRead,
-              isMe: msg.sender == loggedUser.telefono ? true : false,
+              isMe: msg.sender == loggedUser.telefono,
               time: msg.time
             })
         });
         console.log(processedMessages)
+        let last = processedMessages.length-1;
         myMessagges.push({
           title,
           icon,
           isRead: messagge.isRead,
-          msgPreview: processedMessages[0].content,
-          lastMsg:  processedMessages[0].content,
+          msgPreview: processedMessages[last].content,
+          lastMsg:  processedMessages[last].time,
           telefonos: messagge.users,
           emails: messagge.emailUsers,
           msgs: processedMessages,
-          isGroup: messagge.isGroup
+          isGroup: messagge.isGroup,
+          chatKey: messagge.chatKey
         })
     })
     console.log(myMessagges)

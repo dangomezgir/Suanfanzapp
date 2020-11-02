@@ -49,7 +49,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   
   initChat() {
     let loggedUser = JSON.parse(window.localStorage.getItem('user'));
-    loggedUser.icon = '/assets/img/patricio.jpg'
     this.icon = loggedUser.icon;
     if (this.chats.length > 0) {
       this.currentChat = this.chats[0];
@@ -63,13 +62,13 @@ export class HomeComponent implements OnInit, OnDestroy {
         msgs: [],
         telefonos: [],
         emails: [],
-        isGroup: false
-        }
+        isGroup: false,
+        chatKey: ""
+      }
     }
     this.subscriptionList.connection = this.chatService.connect().subscribe(_ => {
       console.log("Nos conectamos");
       this.subscriptionList.msgs = this.chatService.getNewMsgs().subscribe((msg: MessageI) => {
-        msg.isMe = this.currentChat.title === msg.owner ? true : false;
         this.currentChat.msgs.push(msg);
       });
     });
