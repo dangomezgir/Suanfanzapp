@@ -107,6 +107,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   addContact(contactInfo){
     this.showModal = false;
     let contactExist = false;
+    let user = JSON.parse(window.localStorage.getItem('user'));
     if(contactInfo){
       // alert(contactInfo);
       for(let i = 0; i<this.reglist.length; i++){
@@ -114,13 +115,13 @@ export class HomeComponent implements OnInit, OnDestroy {
           contactExist = true;
           let newContact: ChatI = {
             title: this.reglist[i].name,
-            emails: [this.reglist[i].email],
+            emails: [user.email ,this.reglist[i].email],
             icon: "./assets/img/default.png",
             isRead: false,
             lastMsg: "",
             msgPreview: "",
             msgs: [],
-            telefonos: [this.reglist[i].telefono],
+            telefonos: [user.telefono ,this.reglist[i].telefono],
             isGroup: false
           }
           this.chats.push(newContact);

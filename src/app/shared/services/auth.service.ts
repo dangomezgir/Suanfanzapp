@@ -26,6 +26,7 @@ export class AuthService {
           let logVerify=true;
           passwordInput=undefined;
           window.localStorage.setItem('logVerify',JSON.stringify(logVerify));
+          regList[i].password = undefined;
           window.localStorage.setItem('user',JSON.stringify(regList[i]));
         }
       }
