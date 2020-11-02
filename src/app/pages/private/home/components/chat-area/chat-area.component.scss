@@ -68,8 +68,10 @@ $titleFont: sfProTextMedium;
 .chat {
     width: 100%;
     height: calc(100% - 133px);
+    overflow-y: scroll;
     background: #E5DDD5;
     padding-top: 20px;
+    position: relative;
     .chatDateContainer {
         height: 32px;
         margin: 12px 0;
@@ -89,7 +91,24 @@ $titleFont: sfProTextMedium;
             box-shadow:0 1px .5px rgba(black,.13);
         }
     }
-    
+    .scrollDown{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 30px;
+        height: 30px;
+        border-radius: 100%;
+        background-color: grey;
+        position: fixed;
+        align-self: flex-end;
+        text-align: center;
+        left: 97%;
+        top: 88%;
+        z-index: 999;
+        &:hover{
+            cursor: pointer;
+        }
+    }
 }
 .sendMessageForm {
     width: 100%;
