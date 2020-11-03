@@ -7,6 +7,8 @@ import { MessageI } from './interfaces/MessageI';
 import { Router } from '@angular/router';
 import { ProfileService } from 'src/app/shared/services/profile/profile.service';
 
+
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -21,15 +23,18 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   subscriptionList: {
     connection: Subscription,
-    msgs: Subscription
+    msgs: Subscription,
+    connectedUsers: Subscription
   } = {
       connection: undefined,
-      msgs: undefined
+      msgs: undefined,
+      connectedUsers: undefined
   };
   icon: string;
   chats: Array<ChatI> = [];
-
+  usersOnline: Array<string>=[];
   currentChat: ChatI;
+  isCurrentChatOnline: boolean;
 
   constructor(private router:Router, public authService: AuthService, public chatService: ChatService, public profileService: ProfileService) {
     chatService.getInitialMessages().then(snapshot => {
@@ -47,6 +52,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   logOut(){
+    this.chatService.disconnect();
     console.log("logOut");
     window.localStorage.clear();
     this.router.navigate(['/login']);
@@ -73,6 +79,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
     this.subscriptionList.connection = this.chatService.connect().subscribe(_ => {
       console.log("Nos conectamos");
+      this.subscriptionList.connectedUsers=this.chatService.getConnectedUsers().subscribe((users:Array<string>) => this.usersOnline = users) 
       this.subscriptionList.msgs = this.chatService.getNewMsgs().subscribe((msg: MessageI) => {
         this.currentChat.msgs.push(msg);
       });
@@ -81,9 +88,21 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   onSelectInbox(index: number) {
     this.currentChat = this.chats[index];
+    let user = JSON.parse(window.localStorage.getItem("user"));
+
+    if(!this.currentChat.isGroup){
+      let receiverPhone = this.chats[index].telefonos.find(telf => telf != user.telefono);
+      let status = this.usersOnline.find(isOnline=> isOnline == receiverPhone);
+      console.log("status"+status);
+      console.log(receiverPhone);
+      console.log(this.usersOnline);
+      this.isCurrentChatOnline =  typeof status == 'undefined' ? false : true;
+      console.log(this.isCurrentChatOnline);
+    }
   }
 
   doLogout() {
+    
     this.authService.logout();
   }
 
@@ -128,12 +147,13 @@ export class HomeComponent implements OnInit, OnDestroy {
     let contactExist = this.alreadyAddded(contactInfo);
     let samePerson = false;
     let loggedUser = JSON.parse(window.localStorage.getItem('user'));
-    if(((contactInfo.indexOf(loggedUser.telefono) ^ contactInfo.indexOf(loggedUser.email)) == -1)){
-      contactExist = true;
-      samePerson = true;
-    }
+
     
     if(contactInfo){
+      if(((contactInfo.indexOf(loggedUser.telefono) ^ contactInfo.indexOf(loggedUser.email)) == -1)){
+        contactExist = true;
+        samePerson = true;
+      }
       if(contactExist && !samePerson)alert("El número de telefono o email no corresponde al de un usuario registrado.");
       else if(samePerson) alert("No te puedes agregar a ti mismo, porfavor agrega amigos")
       else {

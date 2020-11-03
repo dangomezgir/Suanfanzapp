@@ -28,6 +28,7 @@ $titleFont: sfProTextMedium;
         display: flex;
         align-self: flex-end;
         left: -45px;
+        // background-color: aqua;
         .messageTimeChat{
             margin-right: 2px;
             font-size: 11px;
@@ -75,7 +76,8 @@ $titleFont: sfProTextMedium;
         align-self: flex-end;
         font-size: 11px;
         color: #C1C1C1;
-        left: 54.5%;
+        left: 17%;
+        top:50%;
     }
     .leftTail {
         position: absolute;
