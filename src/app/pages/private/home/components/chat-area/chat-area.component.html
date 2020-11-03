@@ -14,10 +14,11 @@
         </div>
     </div>
 </div>
-<div class="chat">
+<div class="chat" (scroll)="onScroll($event)">
     <!--div class="chatDateContainer">
         <div class="chatDate">TODAY</div>
     </div-->
+    <div class="scrollDown" (click)="scrollDown()" *ngIf="scrollUp"><i class="fas fa-angle-double-down"></i></div>
     <app-chat-message *ngFor="let msg of msgs" [content]="msg.content" [time]="msg.time" [isMe]="msg.isMe" [isRead] = "msg.isRead"></app-chat-message>
 </div>
 <div class="sendMessageForm" *ngIf="icon!=''">
