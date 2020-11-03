@@ -14,12 +14,15 @@ export class ChatAreaComponent implements OnInit {
   @Input() icon: string = ""
   @Input() msgs: Array<MessageI> = []
   @Input() chatInfo: ChatI
+  @Input() connected: boolean
 
   msg: string;
+  estado: string;
 
   constructor(public chatService: ChatService) { }
 
   ngOnInit(): void {
+
   }
 
   sendMsg() {
