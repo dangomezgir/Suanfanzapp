@@ -27,6 +27,14 @@ export class AuthService {
           passwordInput=undefined;
           window.localStorage.setItem('logVerify',JSON.stringify(logVerify));
           regList[i].password = undefined;
+          let processedContacts = [];
+          if('contacts' in regList[i]){
+            Object.keys(regList[i].contacts).forEach(element => {
+              processedContacts.push(regList[i].contacts[element])
+            });
+          }
+          regList[i].contacts = processedContacts;
+          console.log(regList) 
           window.localStorage.setItem('user',JSON.stringify(regList[i]));
         }
       }

@@ -31,10 +31,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   currentChat: ChatI;
 
-  reglist: UserI[];
-
   constructor(private router:Router, public authService: AuthService, public chatService: ChatService, private registerService: RegisterService) {
-    chatService.processContacts();
     chatService.getInitialMessages().then(snapshot => {
       this.chats = chatService.processInitialMessages(snapshot);
     });
@@ -42,7 +39,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.initChat();
-    this.reglist = this.registerService.getRegister();
   }
 
   ngOnDestroy(): void {
@@ -105,29 +101,37 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   addContact(contactInfo){
     this.showModal = false;
-    let contactExist = false;
-    let user = JSON.parse(window.localStorage.getItem('user'));
-    if(contactInfo){
-      // alert(contactInfo);
-      for(let i = 0; i<this.reglist.length; i++){
-        if(this.reglist[i].email === contactInfo || this.reglist[i].telefono === contactInfo){
-          contactExist = true;
-          let newContact: ChatI = {
-            title: this.reglist[i].name,
-            emails: [user.email ,this.reglist[i].email],
-            icon: "./assets/img/default.png",
-            isRead: false,
-            lastMsg: "",
-            msgPreview: "",
-            msgs: [],
-            telefonos: [user.telefono ,this.reglist[i].telefono],
-            isGroup: false
-          }
-          this.chats.push(newContact);
-        }
-      }
-      if(!contactExist)alert("El número de telefono o email no corresponde al de un usuario registrado.")
+    let contactExist = this.alreadyAddded(contactInfo);
+    let samePerson = false;
+    let loggedUser = JSON.parse(window.localStorage.getItem('user'));
+    if(((contactInfo.indexOf(loggedUser.telefono) ^ contactInfo.indexOf(loggedUser.email)) == -1)){
+      contactExist = true;
+      samePerson = true;
     }
+    
+    if(contactInfo){
+      if(contactExist && !samePerson)alert("El número de telefono o email no corresponde al de un usuario registrado.");
+      else if(samePerson) alert("No te puedes agregar a ti mismo, porfavor agrega amigos")
+      else {
+        console.log("add contact")
+        let confirmation = this.chatService.addContact(contactInfo,this.chats)
+        if('error' in confirmation){
+          alert(confirmation.error)
+        }else if('found' in confirmation && confirmation.found){
+          this.chats[confirmation.index].title = confirmation.title;
+          this.chats[confirmation.index].icon = confirmation.icon;
+        }else{
+          this.chats.push(confirmation.data);
+        }
+      };
+    }
+  }
+
+  alreadyAddded(contactInfo): boolean{
+    let contacts = JSON.parse(window.localStorage.getItem('user')).contacts;
+    let found = contacts.find(contact => contact.telefono == contactInfo);
+    let foundEmail = contacts.find(contact => contact.email == contactInfo);
+    return found || foundEmail
   }
 
 }

@@ -4,7 +4,11 @@ import { Observable } from 'rxjs';
 import { MessageI } from 'src/app/pages/private/home/interfaces/MessageI';
 import * as firebase from 'firebase';
 import { ChatI } from '../../../pages/private/home/interfaces/ChatI';
-import { setMaxListeners } from 'process';
+import { ContactI } from 'src/app/pages/private/home/interfaces/contact';
+import { RegisterService } from '../register/register.service';
+import { UserI } from '../../interfaces/UserI';
+import { FirebaseApp } from '@angular/fire';
+import { cpuUsage } from 'process';
 
 @Injectable({
   providedIn: 'root'
@@ -13,9 +17,11 @@ export class ChatService {
 
   socket: any;
   dbRef: any;
+  users: UserI[];
   
-  constructor() { 
+  constructor(private registerService: RegisterService) { 
     this.dbRef =firebase.database().ref('messages');
+    this.users = registerService.getRegister()
   }
 
   connect() {
@@ -60,27 +66,51 @@ export class ChatService {
   }
 
 
-  processContacts(){
+  addContact(contact, chats:ChatI[]){
     let loggedUser = JSON.parse(window.localStorage.getItem('user'));
-    console.log(loggedUser)
-    let Sentmessage ={
-        users : ["+393491208283","+555555555"],
+    let user = this.users.find(user => user.telefono == contact) || this.users.find(user => user.email == contact);
+    if(user){
+      let updateUser = firebase.database().ref('users').child(loggedUser.userKey).child('contacts');
+      let intialConv = {
+        users : [loggedUser.telefono,user.telefono],
         isGroup: false,
         isRead: false,
-        emailUsers: ["patricio.estrella@gmail.com","test@gmail.com"],
-        msgs: [
-          {
-            content: "Hola Testo!",
-            isRead: false,
-            sender : "+393491208283",
-            time: "12:46"
-
-          }
-        ]
+        emailUsers: [loggedUser.email,user.email],
+        msgs: []
       }
-    //this.dbRef.push(Sentmessage);
-  }
 
+      updateUser.push({
+        email: user.email,
+        icon: user.icon,
+        name: user.name,
+        telefono: user.telefono
+      })
+      let foundConv = chats.find(chat => chat.telefonos.find(telfono => telfono == contact) || chat.emails.find(email => email == contact));
+      if(foundConv){
+        return {found: true, title: user.name, icon: user.icon, index: chats.indexOf(foundConv)}
+      }else{
+        let key = this.dbRef.push(intialConv);
+        return {
+                data:{
+                  title: user.name,
+                  icon: user.icon,
+                  isRead: false,
+                  msgPreview:  '',
+                  lastMsg:  '',
+                  telefonos: [loggedUser.telefono,user.telefono],
+                  emails: [loggedUser.email,user.email],
+                  msgs: [],
+                  isGroup: false,
+                  chatKey: key.key
+                }
+        }
+      }
+    }else{
+      return {error: "Usuario no encontrado por favor revisar la informacion ingresada"}
+    }
+    
+  }
+  
   getInitialMessages(){
     return firebase.database().ref('messages').once('value');
   }
@@ -106,37 +136,37 @@ export class ChatService {
           icon = messagge.groupIcon;
         }else{
           let otherNumber = messagge.users.find(user => user != loggedUser.telefono);
-          if(loggedUser.contacts){
-            title = loggedUser.contacts.find(contact => contact.telefono == otherNumber).name ? loggedUser.contacts.find(contact => contact.telefono == otherNumber).name : otherNumber;
-            icon = loggedUser.contacts.find(contact => contact.telefono == otherNumber).icon ? loggedUser.contacts.find(contact => contact.telefono == otherNumber).icon : "/assets/img/defaultPP.png";
+          if(loggedUser.contacts && loggedUser.contacts.length > 0){
+            title = loggedUser.contacts.find(contact => contact.telefono == otherNumber) ? loggedUser.contacts.find(contact => contact.telefono == otherNumber).name : otherNumber;
+            icon = loggedUser.contacts.find(contact => contact.telefono == otherNumber) ? loggedUser.contacts.find(contact => contact.telefono == otherNumber).icon : "/assets/img/defaultPP.png";
           }else{
             title = otherNumber;
             icon = "/assets/img/defaultPP.png";
           }
         }
         let messages = []
-        
-        Object.keys(messagge.msgs).forEach(key => {
-          let data = messagge.msgs[key];
-          messages.push(data)
-        }); 
         let processedMessages = [];
-        messages.forEach(msg => {
-            processedMessages.push({
-              content: msg.content,
-              isRead: msg.isRead,
-              isMe: msg.sender == loggedUser.telefono,
-              time: msg.time
-            })
-        });
-        console.log(processedMessages)
+        if('msgs' in messagge){
+          Object.keys(messagge.msgs).forEach(key => {
+            let data = messagge.msgs[key];
+            messages.push(data)
+          }); 
+          messages.forEach(msg => {
+              processedMessages.push({
+                content: msg.content,
+                isRead: msg.isRead,
+                isMe: msg.sender == loggedUser.telefono,
+                time: msg.time
+              })
+          });
+        }
         let last = processedMessages.length-1;
         myMessagges.push({
           title,
           icon,
           isRead: messagge.isRead,
-          msgPreview: processedMessages[last].content,
-          lastMsg:  processedMessages[last].time,
+          msgPreview: typeof processedMessages[last] !== 'undefined' ? processedMessages[last].content : '',
+          lastMsg:  typeof processedMessages[last] !== 'undefined' ? processedMessages[last].time : '',
           telefonos: messagge.users,
           emails: messagge.emailUsers,
           msgs: processedMessages,
