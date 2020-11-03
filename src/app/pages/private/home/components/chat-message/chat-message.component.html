@@ -1,6 +1,5 @@
 <div [class]="isMe ? 'messageRightContainer' : 'messageLeftContainer'">
     <div [class]="isMe ? 'messageTextRight' : 'messageTextLeft'">{{ content }}
-        <p class="messageTimeChat">{{ time | date: 'shortTime' }}</p>
     </div>
     <div class="messageTimeContainer">
         <div class="messageTimeChat">{{ time }}</div>
