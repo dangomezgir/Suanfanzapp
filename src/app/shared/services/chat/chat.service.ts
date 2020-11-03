@@ -26,13 +26,23 @@ export class ChatService {
 
   connect() {
     return new Observable(observer => {
-      // this.socket = io('http://192.168.0.23:3000');
-      this.socket = io('localhost:3000');
+      this.socket = io('http://localhost:3000');
       this.socket.on('connect', () => {
+        let loggedUser = JSON.parse(window.localStorage.getItem("user"));
+        this.socket.emit("connected",loggedUser);
         observer.next();
       })
     })
   }
+
+  getConnectedUsers(){
+    return new Observable(observer => {
+      this.socket.on("connectedUsers", users => {
+        observer.next(users);
+      });
+    });
+  }
+
 
   getNewMsgs() {
     return new Observable(observer => {
@@ -180,6 +190,8 @@ export class ChatService {
   }
 
   disconnect() {
+    let loggedUser = JSON.parse(window.localStorage.getItem('user'));
+    this.socket.emit('disconnected',loggedUser);
     this.socket.disconnect();
   }
 

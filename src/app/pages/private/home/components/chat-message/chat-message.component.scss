@@ -28,6 +28,7 @@ $titleFont: sfProTextMedium;
         display: flex;
         align-self: flex-end;
         left: -45px;
+        // background-color: aqua;
         .messageTimeChat{
             margin-right: 2px;
             font-size: 11px;
@@ -77,6 +78,7 @@ $titleFont: sfProTextMedium;
         padding-right: 12px;
         display: flex;
         align-self: flex-end;
+<<<<<<< HEAD
         left: -45px;
         .messageTimeChat{
             margin-right: 2px;
@@ -86,6 +88,12 @@ $titleFont: sfProTextMedium;
         .svg{
             display: none;
         }
+=======
+        font-size: 11px;
+        color: #C1C1C1;
+        left: 17%;
+        top:50%;
+>>>>>>> mariana
     }
     .leftTail {
         left: 515px;

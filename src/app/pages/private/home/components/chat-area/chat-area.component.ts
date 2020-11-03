@@ -15,14 +15,17 @@ export class ChatAreaComponent implements OnInit, OnChanges {
   @Input() icon: string = ""
   @Input() msgs: Array<MessageI> = []
   @Input() chatInfo: ChatI
+  @Input() connected: boolean
 
   msg: string;
+  estado: string;
 
   scrollUp: boolean;
   
   constructor(public chatService: ChatService, public inboxChatComponent: InboxChatComponent) { }
 
   ngOnInit(): void {
+
   }
 
   ngOnChanges(){
