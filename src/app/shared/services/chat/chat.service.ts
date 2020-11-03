@@ -4,7 +4,11 @@ import { Observable } from 'rxjs';
 import { MessageI } from 'src/app/pages/private/home/interfaces/MessageI';
 import * as firebase from 'firebase';
 import { ChatI } from '../../../pages/private/home/interfaces/ChatI';
-import { setMaxListeners } from 'process';
+import { ContactI } from 'src/app/pages/private/home/interfaces/contact';
+import { RegisterService } from '../register/register.service';
+import { UserI } from '../../interfaces/UserI';
+import { FirebaseApp } from '@angular/fire';
+import { cpuUsage } from 'process';
 
 @Injectable({
   providedIn: 'root'
@@ -13,9 +17,11 @@ export class ChatService {
 
   socket: any;
   dbRef: any;
-
-  constructor() { 
+  users: UserI[];
+  
+  constructor(private registerService: RegisterService) { 
     this.dbRef =firebase.database().ref('messages');
+    this.users = registerService.getRegister()
   }
 
   connect() {
@@ -31,48 +37,81 @@ export class ChatService {
   getNewMsgs() {
     return new Observable(observer => {
       this.socket.on("newMsg", msg => {
-        let user = JSON.parse(window.localStorage.getItem("user"));
         let receiver = this.verifyMessage(msg);
-        if(receiver){
+        if(receiver.acceptMessage || receiver.imSender){
+          if(receiver.acceptMessage){
+              msg.msg.isMe = false;
+          }
           observer.next(msg.msg);
         }
       });
     });
   }
 
-  verifyMessage(msg):boolean{
+  verifyMessage(msg){
     let user = JSON.parse(window.localStorage.getItem("user"));
-    let receiverPhone = msg.toUser.telefonos.find(telf => telf == user.telefono);
-    let receiverEmail = msg.toUser.emails.find(email => email == user.email);
-    return receiverPhone || receiverEmail || msg.user.telefono == user.telefono || msg.user.email == user.email;
+    let receiverPhone = msg.toUser.telefonos.find(telf => telf == user.telefono &&  telf != msg.user.telefono);
+    let receiverEmail = msg.toUser.emails.find(email => email == user.email && email != msg.user.email);
+    return {
+      acceptMessage: receiverPhone || receiverEmail ,
+      imSender: msg.user.email == user.email || msg.user.telefono == user.telefono
+    };
   }
-  sendMsg(msg: MessageI, toUser: object) {
+  sendMsg(msg: MessageI, toUser: ChatI) {
     let user = JSON.parse(window.localStorage.getItem('user'));
+    let updateRef = firebase.database().ref(`messages`).child(toUser.chatKey).child('msgs');
+    let date = new Date();
+    let time = `${date.getHours()}:${date.getMinutes()}`;
+    updateRef.push({content: msg.content,isRead: false, sender: user.telefono, time})
     this.socket.emit('newMsg', {msg, user, toUser});
   }
 
 
-  processContacts(){
+  addContact(contact, chats:ChatI[]){
     let loggedUser = JSON.parse(window.localStorage.getItem('user'));
-    console.log(loggedUser)
-    let Sentmessage ={
-        users : ["+393491208283","+555555555"],
+    let user = this.users.find(user => user.telefono == contact) || this.users.find(user => user.email == contact);
+    if(user){
+      let updateUser = firebase.database().ref('users').child(loggedUser.userKey).child('contacts');
+      let intialConv = {
+        users : [loggedUser.telefono,user.telefono],
         isGroup: false,
         isRead: false,
-        emailUsers: ["patricio.estrella@gmail.com","test@gmail.com"],
-        msgs: [
-          {
-            content: "Hola Testo!",
-            isRead: false,
-            sender : "+393491208283",
-            time: "12:46"
-
-          }
-        ]
+        emailUsers: [loggedUser.email,user.email],
+        msgs: []
       }
-    //this.dbRef.push(Sentmessage);
-  }
 
+      updateUser.push({
+        email: user.email,
+        icon: user.icon,
+        name: user.name,
+        telefono: user.telefono
+      })
+      let foundConv = chats.find(chat => chat.telefonos.find(telfono => telfono == contact) || chat.emails.find(email => email == contact));
+      if(foundConv){
+        return {found: true, title: user.name, icon: user.icon, index: chats.indexOf(foundConv)}
+      }else{
+        let key = this.dbRef.push(intialConv);
+        return {
+                data:{
+                  title: user.name,
+                  icon: user.icon,
+                  isRead: false,
+                  msgPreview:  '',
+                  lastMsg:  '',
+                  telefonos: [loggedUser.telefono,user.telefono],
+                  emails: [loggedUser.email,user.email],
+                  msgs: [],
+                  isGroup: false,
+                  chatKey: key.key
+                }
+        }
+      }
+    }else{
+      return {error: "Usuario no encontrado por favor revisar la informacion ingresada"}
+    }
+    
+  }
+  
   getInitialMessages(){
     return firebase.database().ref('messages').once('value');
   }
@@ -80,7 +119,9 @@ export class ChatService {
   processInitialMessages (snapshot){
     let dbData = []
     Object.keys(snapshot.val()).forEach(element => {
-        dbData.push(snapshot.val()[element])
+        let data = snapshot.val()[element];
+        data.chatKey = element
+        dbData.push(data)
     }); 
     
     let loggedUser = JSON.parse(window.localStorage.getItem('user'));
@@ -89,7 +130,6 @@ export class ChatService {
     })
     let myMessagges = [];
     dbData.forEach(messagge => {
-      console.log("Entra")
         let title = "";
         let icon = "";
         if(messagge.isGroup){
@@ -97,34 +137,42 @@ export class ChatService {
           icon = messagge.groupIcon;
         }else{
           let otherNumber = messagge.users.find(user => user != loggedUser.telefono);
-          if(loggedUser.contacts){
-            title = loggedUser.contacts.find(contact => contact.telefono == otherNumber).name ? loggedUser.contacts.find(contact => contact.telefono == otherNumber).name : otherNumber;
-            icon = loggedUser.contacts.find(contact => contact.telefono == otherNumber).icon ? loggedUser.contacts.find(contact => contact.telefono == otherNumber).icon : "/assets/img/defaultPP.png";
+          if(loggedUser.contacts && loggedUser.contacts.length > 0){
+            title = loggedUser.contacts.find(contact => contact.telefono == otherNumber) ? loggedUser.contacts.find(contact => contact.telefono == otherNumber).name : otherNumber;
+            icon = loggedUser.contacts.find(contact => contact.telefono == otherNumber) ? loggedUser.contacts.find(contact => contact.telefono == otherNumber).icon : "/assets/img/defaultPP.png";
           }else{
             title = otherNumber;
             icon = "/assets/img/defaultPP.png";
           }
         }
+        let messages = []
         let processedMessages = [];
-        messagge.msgs.forEach(msg => {
-            processedMessages.push({
-              content: msg.content,
-              isRead: msg.isRead,
-              isMe: msg.sender == loggedUser.telefono ? true : false,
-              time: msg.time
-            })
-        });
-        console.log(processedMessages)
+        if('msgs' in messagge){
+          Object.keys(messagge.msgs).forEach(key => {
+            let data = messagge.msgs[key];
+            messages.push(data)
+          }); 
+          messages.forEach(msg => {
+              processedMessages.push({
+                content: msg.content,
+                isRead: msg.isRead,
+                isMe: msg.sender == loggedUser.telefono,
+                time: msg.time
+              })
+          });
+        }
+        let last = processedMessages.length-1;
         myMessagges.push({
           title,
           icon,
           isRead: messagge.isRead,
-          msgPreview: processedMessages[0].content,
-          lastMsg:  processedMessages[0].content,
+          msgPreview: typeof processedMessages[last] !== 'undefined' ? processedMessages[last].content : '',
+          lastMsg:  typeof processedMessages[last] !== 'undefined' ? processedMessages[last].time : '',
           telefonos: messagge.users,
           emails: messagge.emailUsers,
           msgs: processedMessages,
-          isGroup: messagge.isGroup
+          isGroup: messagge.isGroup,
+          chatKey: messagge.chatKey
         })
     })
     console.log(myMessagges)
