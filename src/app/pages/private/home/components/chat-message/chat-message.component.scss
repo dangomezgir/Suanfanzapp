@@ -70,15 +70,32 @@ $titleFont: sfProTextMedium;
         box-shadow:0 1px .5px rgba(black,.13);
         flex-grow: .1;
     }
-    .messageTimeChat{
-        position: absolute;
+    .messageTimeContainer {
+        position: relative;
+        height: 15px;
+        margin-bottom: 1px;
+        padding-right: 12px;
         display: flex;
         align-self: flex-end;
-        font-size: 11px;
-        color: #C1C1C1;
-        left: 17%;
-        top:50%;
+        left: -45px;
+        // background-color: aqua;
+        .messageTimeChat{
+            margin-right: 2px;
+            font-size: 11px;
+            color: #9AAE8C;
+        }
     }
+    // .messageTimeChat{
+    //     position: relative;
+    //     display: flex;
+    //     align-self: flex-end;
+    //     font-size: 11px;
+    //     color: #C1C1C1;
+    //     // left: 17%;
+    //     background-color: aqua;
+    //     // right: 5%;
+    //     top:50%;
+    // }
     .leftTail {
         position: absolute;
         left: 515px;

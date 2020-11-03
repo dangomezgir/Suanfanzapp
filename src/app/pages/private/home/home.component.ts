@@ -18,6 +18,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   showContactModal: boolean = false;
   showProfileModal: boolean = false;
+  showNewGroupModal: boolean = false;
 
   contactInfo: string = '';
 
@@ -118,6 +119,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.showContactModal = true;
   }
 
+  openNewGroupModal(){
+    this.showNewGroupModal = true;
+  }
+
+
   openProfileModal(){
     this.showProfileModal = true;
   }
@@ -125,6 +131,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   closeContact(){
     this.showContactModal = false;
   }
+
+  closeNewGroup(){
+    this.showNewGroupModal = false;
+  }
+
 
   closeProfile(){
     this.showProfileModal = false;
@@ -144,6 +155,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   addContact(contactInfo){
     this.showContactModal = false;
+    this.showNewGroupModal=false
     let contactExist = this.alreadyAddded(contactInfo);
     let samePerson = false;
     let loggedUser = JSON.parse(window.localStorage.getItem('user'));

@@ -11,12 +11,16 @@
                     </div>
                     <div class="newChatContainer">
                         <button (click)="openContactModal()"  style="border: 2px solid rgb(239, 239, 239);">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="#919191" d="M19.005 3.175H4.674C3.642 3.175 3 3.789 3 4.821V21.02l3.544-3.514h12.461c1.033 0 2.064-1.06 2.064-2.093V4.821c-.001-1.032-1.032-1.646-2.064-1.646zm-4.989 9.869H7.041V11.1h6.975v1.944zm3-4H7.041V7.1h9.975v1.944z"></path></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#919191" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
                         </button>
+                    </div>
+                    <div class="newGroupContainer">
+                        <button (click)="openNewGroupModal()"  style="border: 2px solid rgb(239, 239, 239);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#919191" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></button>
                     </div>
                     <div class="leftMore">
                         <button (click)="logOut()"  style="border: 2px solid rgb(239, 239, 239);">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="#919191" d="M12 7a2 2 0 1 0-.001-4.001A2 2 0 0 0 12 7zm0 2a2 2 0 1 0-.001 3.999A2 2 0 0 0 12 9zm0 6a2 2 0 1 0-.001 3.999A2 2 0 0 0 12 15z"></path></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#919191" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v18h-6M10 17l5-5-5-5M13.8 12H3"/></svg>
                         </button>
                     </div>
                 </div>
@@ -40,5 +44,7 @@
     <div>
         <app-contact-modal [contactInfo]="contactInfo" *ngIf="showContactModal" (onCloseContact)="closeContact()" (onAddContact)="addContact($event)"></app-contact-modal>
         <app-profile-modal *ngIf="showProfileModal" (onCloseProfile)="closeProfile()" (onUpdateProfile)="updateProfile($event)"></app-profile-modal>
+        <app-new-group-modal *ngIf="showNewGroupModal"></app-new-group-modal>
+        
     </div>
 </div>
