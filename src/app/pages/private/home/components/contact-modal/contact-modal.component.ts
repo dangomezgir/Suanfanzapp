@@ -9,14 +9,15 @@ export class ContactModalComponent implements OnInit {
 
   @Input() contactInfo: string = '';
 
-  @Output() onClose = new EventEmitter();
+  @Output() onCloseContact = new EventEmitter();
+  @Output() onAddContact = new EventEmitter();
 
   constructor() { }
 
   ngOnInit(): void {
   }
 
-  cancel(){ this.onClose.emit(null); }
-  addContact(){ this.onClose.emit(this.contactInfo); }
+  cancel(){ this.onCloseContact.emit(null); }
+  addContact(){ this.onAddContact.emit(this.contactInfo); }
 
 }
