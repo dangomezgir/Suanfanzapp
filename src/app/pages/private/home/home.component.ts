@@ -127,9 +127,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
-<<<<<<< HEAD
-  
-=======
   alreadyAddded(contactInfo): boolean{
     let contacts = JSON.parse(window.localStorage.getItem('user')).contacts;
     let found = contacts.find(contact => contact.telefono == contactInfo);
@@ -137,5 +134,4 @@ export class HomeComponent implements OnInit, OnDestroy {
     return found || foundEmail
   }
 
->>>>>>> mariana
 }
