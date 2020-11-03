@@ -5,8 +5,7 @@ import { ChatService } from 'src/app/shared/services/chat/chat.service';
 import { ChatI } from './interfaces/ChatI';
 import { MessageI } from './interfaces/MessageI';
 import { Router } from '@angular/router';
-import { RegisterService } from 'src/app/shared/services/register/register.service';
-import { UserI } from 'src/app/shared/interfaces/UserI';
+import { ProfileService } from 'src/app/shared/services/profile/profile.service';
 
 
 
@@ -17,7 +16,8 @@ import { UserI } from 'src/app/shared/interfaces/UserI';
 })
 export class HomeComponent implements OnInit, OnDestroy {
 
-  showModal: boolean = false;
+  showContactModal: boolean = false;
+  showProfileModal: boolean = false;
 
   contactInfo: string = '';
 
@@ -36,7 +36,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   currentChat: ChatI;
   isCurrentChatOnline: boolean;
 
-  constructor(private router:Router, public authService: AuthService, public chatService: ChatService, private registerService: RegisterService) {
+  constructor(private router:Router, public authService: AuthService, public chatService: ChatService, public profileService: ProfileService) {
     chatService.getInitialMessages().then(snapshot => {
       this.chats = chatService.processInitialMessages(snapshot);
     });
@@ -115,12 +115,36 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
-  openModal(){
-    this.showModal = true;
+  openContactModal(){
+    this.showContactModal = true;
+  }
+
+  openProfileModal(){
+    this.showProfileModal = true;
+  }
+
+  closeContact(){
+    this.showContactModal = false;
+  }
+
+  closeProfile(){
+    this.showProfileModal = false;
+  }
+
+  updateProfile(newInfo){
+    // alert('Funciona el evento');
+    // console.log(newInfo);
+    if(newInfo.foto || newInfo.nombres || newInfo.apellidos){
+      console.log('no está vacío');
+      this.profileService.updateProfileInfo(newInfo);
+      // this.showProfileModal = false;
+    }else{
+      alert('Todos los campos están vacíos');
+    }
   }
 
   addContact(contactInfo){
-    this.showModal = false;
+    this.showContactModal = false;
     let contactExist = this.alreadyAddded(contactInfo);
     let samePerson = false;
     let loggedUser = JSON.parse(window.localStorage.getItem('user'));

@@ -1,0 +1,37 @@
+<div class="modal is-active">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title">Actualizar perfil</p>
+            <button class="delete" aria-label="close" (click)="cancel()"></button>
+        </header>
+        <section class="modal-card-body">
+            <div class="newName">
+                <p>Nombre(s): </p><input class="input" type="text" name="newName" id="newName" [(ngModel)]="newName">
+            </div>
+            <div class="newLastName">
+                <p style="margin-top: 15px;">Apellido(s): </p><input class="input" type="text" name="newLastName"
+                    id="newLastName" [(ngModel)]="newLastName">
+            </div>
+            <div class="file has-name" style="margin-top: 15px;">
+                <label class="file-label">
+                    <input class="file-input" type="file" name="resume" (change)="onFileSelected($event)"
+                        accept="image/*">
+                    <span class="file-cta">
+                        <span class="file-icon">
+                            <i class="fas fa-upload"></i>
+                        </span>
+                        <span class="file-label">
+                            Escoge una foto de perfil...
+                        </span>
+                    </span>
+                    <span class="file-name" *ngIf="fileIsSelected">{{picture.name}}</span>
+                </label>
+            </div>
+        </section>
+        <footer class="modal-card-foot">
+            <button class="button is-success" (click)="accept()">Agregar</button>
+            <button class="button" (click)="cancel()">Cerrar</button>
+        </footer>
+    </div>
+</div>
