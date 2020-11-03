@@ -1,6 +1,6 @@
 export interface MessageI{
     content: string
-    time: Date
+    time: string
     isRead: boolean
     owner?: string
     isMe: boolean

@@ -82,6 +82,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.subscriptionList.connectedUsers=this.chatService.getConnectedUsers().subscribe((users:Array<string>) => this.usersOnline = users) 
       this.subscriptionList.msgs = this.chatService.getNewMsgs().subscribe((msg: MessageI) => {
         this.currentChat.msgs.push(msg);
+        console.log(msg);
       });
     });
   }

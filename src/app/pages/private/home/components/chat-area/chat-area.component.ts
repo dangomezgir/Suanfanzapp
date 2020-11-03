@@ -36,11 +36,11 @@ export class ChatAreaComponent implements OnInit, OnChanges {
     const msg: MessageI = {
       content: this.msg,
       isMe: true,
-      time: new Date(),
+      time: 'new Date()',
       isRead: false,
     }
     this.chatService.sendMsg(msg, this.chatInfo);
-    this.inboxChatComponent.sendMsg(msg);
+    //this.inboxChatComponent.sendMsg(msg);
     this.msg = "";
     // this.scrollDown();
     // this.scrollDown();
