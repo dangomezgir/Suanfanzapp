@@ -13,7 +13,9 @@ export class RegisterService {
   getRegister() {
     let regList = [];
     this.dbRef.on('child_added', snapshot => {
-      regList.push(snapshot.val())
+      let data = snapshot.val()
+      data.userKey = snapshot.key;
+      regList.push(data)
     });
     return regList;
   }

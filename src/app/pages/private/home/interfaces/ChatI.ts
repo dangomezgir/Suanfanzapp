@@ -10,4 +10,5 @@ export interface ChatI{
     telefonos: Array<string>
     emails: Array<string>
     isGroup: boolean
+    chatKey: string
 }
