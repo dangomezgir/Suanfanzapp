@@ -87,6 +87,8 @@ export class HomeComponent implements OnInit, OnDestroy {
         let user = JSON.parse(window.localStorage.getItem("user"));
         if(msg.sender == user.telefono){
           this.currentChat.msgs.push(msg.msg)
+          this.currentChat.lastMsg = msg.msg.time;
+          this.currentChat.msgPreview = msg.msg.content;
         }
         else{
           if(msg.isgroup){
