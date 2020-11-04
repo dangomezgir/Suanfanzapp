@@ -132,14 +132,15 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   updateProfile(newInfo){
     // alert('Funciona el evento');
-    // console.log(newInfo);
-    if(newInfo.foto || newInfo.nombres || newInfo.apellidos){
+    console.log(newInfo);
+    if(newInfo.newIcon || newInfo.newName || newInfo.newLastName){
       console.log('no está vacío');
       this.profileService.updateProfileInfo(newInfo);
       // this.showProfileModal = false;
     }else{
       alert('Todos los campos están vacíos');
     }
+    // if(newInfo.newIcon)console.log('sí hay foto');
   }
 
   addContact(contactInfo){

@@ -27,16 +27,16 @@ export class ProfileModalComponent implements OnInit {
     this.fileIsSelected = false; 
   }
   accept(){ 
-    this.newInfo['nombres'] = this.newName;
-    this.newInfo['apellidos'] = this.newLastName;
+    this.newInfo['newName'] = this.newName;
+    this.newInfo['newLastName'] = this.newLastName;
     // console.log(this.newInfo);
     this.onUpdateProfile.emit(this.newInfo);
   }
   onFileSelected(event){
     this.fileIsSelected = true;
     this.picture = event.target.files[0];
-    this.newInfo['foto'] = this.picture;
-    // console.log(this.picture);
+    this.newInfo['newIcon'] = this.picture;
+    // console.log(this.newInfo);
   }
 
 }

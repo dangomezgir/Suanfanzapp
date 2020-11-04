@@ -8,21 +8,35 @@ export class ProfileService {
 
   db = firebase.database();
   storage = firebase.storage();
+  user = JSON.parse(window.localStorage.getItem("user"));
 
   constructor() { }
 
   updateProfileInfo(newInfo){
-    // console.log(newInfo);
-    // if(!newInfo.apellidos){
-    //   console.log('no hay apellido')
-    // }
-    if(!newInfo.foto){
-      alert('no hay foto');
+    if(newInfo.newIcon){
+      console.log('subiendo foto');
+      this.uploadPicture(newInfo.newIcon);
     }else{
-      alert('subiendo foto');
-      this.uploadPicture(newInfo.foto);
-      
+      console.log('no hay foto');
     }
+
+    if(newInfo.newName){
+      // console.log(newInfo.newName);
+      this.updateName(newInfo.newName);
+    }else{
+      console.log('no se cambiará el nombre');
+    }
+
+    if(newInfo.newLastName){
+      // console.log(newInfo.newName);
+      this.updateLastName(newInfo.newLastName);
+    }else{
+      console.log('no se cambiará el apellido');
+    }
+  }
+  updateLastName(newLastName: any) {
+    let key = this.user.userKey;
+    this.db.ref('users').child(key).update({lname: newLastName});
   }
 
   uploadPicture(foto){
@@ -60,7 +74,15 @@ export class ProfileService {
         };
         updates['profilePics/' + postKey] = imgData;
         this.db.ref().update(updates);
+        let userKey = this.user.userKey;
+        this.db.ref('users').child(userKey).update({icon: downloadURL});
+        console.log('icono actualizado');
       });
     });
+  }
+
+  updateName(newName){
+    let key = this.user.userKey;
+    this.db.ref('users').child(key).update({name: newName});
   }
 }

@@ -47,7 +47,7 @@ export class ChatAreaComponent implements OnInit, OnChanges {
   }
 
   onScroll(event){
-    // console.log(event);
+    console.log(event);
     let scrollTop = event.target.scrollTop;
     let scrollHeight = event.target.scrollHeight;
     let offsetHeight = event.target.offsetHeight;
