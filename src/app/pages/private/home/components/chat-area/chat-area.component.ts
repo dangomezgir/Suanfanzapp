@@ -21,6 +21,7 @@ export class ChatAreaComponent implements OnInit, OnChanges {
   estado: string;
   contenT: string;
   scrollUp: boolean;
+  boll: boolean = false;
   
   constructor(public chatService: ChatService, public inboxChatComponent: InboxChatComponent) { }
 
@@ -81,7 +82,17 @@ export class ChatAreaComponent implements OnInit, OnChanges {
         return res.content.toLowerCase().match(this.contenT.toLowerCase());
       });
     }else{
-      return this.msg
+      this.msgs=this.msgs.filter(norm=>{
+        return norm.content.toLowerCase();
+      });
+    }
+  }
+
+  onClickMe() {
+    if(this.boll==false){
+      this.boll = true;
+    }else{
+      this.boll = false;
     }
   }
 }
