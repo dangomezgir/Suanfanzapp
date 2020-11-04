@@ -44,7 +44,7 @@
     <div>
         <app-contact-modal [contactInfo]="contactInfo" *ngIf="showContactModal" (onCloseContact)="closeContact()" (onAddContact)="addContact($event)"></app-contact-modal>
         <app-profile-modal *ngIf="showProfileModal" (onCloseProfile)="closeProfile()" (onUpdateProfile)="updateProfile($event)"></app-profile-modal>
-        <app-new-group-modal *ngIf="showNewGroupModal"></app-new-group-modal>
+        <app-new-group-modal *ngIf="showNewGroupModal" (onCloseGroup)="closeGroup()" (onCreateGroup)="createGroup($event)"></app-new-group-modal>
         
     </div>
 </div>

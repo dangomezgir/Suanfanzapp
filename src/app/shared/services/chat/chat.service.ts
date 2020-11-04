@@ -8,7 +8,6 @@ import { ContactI } from 'src/app/pages/private/home/interfaces/contact';
 import { RegisterService } from '../register/register.service';
 import { UserI } from '../../interfaces/UserI';
 import { FirebaseApp } from '@angular/fire';
-import { cpuUsage } from 'process';
 
 @Injectable({
   providedIn: 'root'
@@ -53,7 +52,7 @@ export class ChatService {
           if(receiver.acceptMessage){
               msg.msg.isMe = false;
           }
-          observer.next(msg.msg);
+          observer.next({msg: msg.msg, sender: msg.user.telefono, isGroup: msg.toUser.isGroup, title: msg.toUser.title, conv: msg.toUser});
         }
       });
     });
@@ -77,6 +76,37 @@ export class ChatService {
     this.socket.emit('newMsg', {msg, user, toUser});
   }
 
+  createGroup(groupInfo){
+    let loggedUser = JSON.parse(window.localStorage.getItem('user'));
+    let intialConv = {
+      users : [loggedUser.telefono],
+      isGroup: true,
+      groupAdmin: [loggedUser.telefono],
+      isRead: false,
+      emailUsers: [loggedUser.email],
+      msgs: [],
+      groupName: groupInfo.name,
+      groupIcon : "https://cdn.onlinewebfonts.com/svg/img_258694.png"
+    }
+    groupInfo.contacts.map(contact => {
+      intialConv.users.push(contact.telefono);
+      intialConv.emailUsers.push(contact.email);
+    })
+    let key = this.dbRef.push(intialConv);
+    return {
+            title: groupInfo.name,
+            icon: intialConv.groupIcon,
+            msgPreview:  '',
+            isRead: false,
+            lastMsg:  '',
+            msgs: [],
+            telefonos: intialConv.users,
+            emails: intialConv.emailUsers,
+            isGroup: true,
+            chatKey: key.key,
+            groupAdmin: [loggedUser.telefono]
+          }
+  }
 
   addContact(contact, chats:ChatI[]){
     let loggedUser = JSON.parse(window.localStorage.getItem('user'));
@@ -143,9 +173,11 @@ export class ChatService {
     dbData.forEach(messagge => {
         let title = "";
         let icon = "";
+        let groupAdmin = []
         if(messagge.isGroup){
           title = messagge.groupName;
           icon = messagge.groupIcon;
+          groupAdmin = messagge.groupAdmin;
         }else{
           let otherNumber = messagge.users.find(user => user != loggedUser.telefono);
           if(loggedUser.contacts && loggedUser.contacts.length > 0){
@@ -176,14 +208,15 @@ export class ChatService {
         myMessagges.push({
           title,
           icon,
-          isRead: messagge.isRead,
           msgPreview: typeof processedMessages[last] !== 'undefined' ? processedMessages[last].content : '',
+          isRead: messagge.isRead,
           lastMsg:  typeof processedMessages[last] !== 'undefined' ? processedMessages[last].time : '',
+          msgs: processedMessages,
           telefonos: messagge.users,
           emails: messagge.emailUsers,
-          msgs: processedMessages,
           isGroup: messagge.isGroup,
-          chatKey: messagge.chatKey
+          chatKey: messagge.chatKey,
+          groupAdmin: groupAdmin
         })
     })
     console.log(myMessagges)

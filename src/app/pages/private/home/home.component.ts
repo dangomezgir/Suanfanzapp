@@ -6,6 +6,7 @@ import { ChatI } from './interfaces/ChatI';
 import { MessageI } from './interfaces/MessageI';
 import { Router } from '@angular/router';
 import { ProfileService } from 'src/app/shared/services/profile/profile.service';
+import { ReceivedMessageI } from './interfaces/receivedMessage';
 
 
 
@@ -81,8 +82,26 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.subscriptionList.connection = this.chatService.connect().subscribe(_ => {
       console.log("Nos conectamos");
       this.subscriptionList.connectedUsers=this.chatService.getConnectedUsers().subscribe((users:Array<string>) => this.usersOnline = users) 
-      this.subscriptionList.msgs = this.chatService.getNewMsgs().subscribe((msg: MessageI) => {
-        this.currentChat.msgs.push(msg);
+      this.subscriptionList.msgs = this.chatService.getNewMsgs().subscribe((msg: ReceivedMessageI) => {
+        let correctChat: ChatI;
+        console.log(msg.conv)
+        if(msg.isgroup){
+          correctChat = this.chats.find(chat => chat.title == msg.title);
+        }else{
+          correctChat = this.chats.find(chat => chat.telefonos.find(telefono => telefono == msg.sender))
+        }
+        if(correctChat){
+          correctChat.msgs.push(msg.msg);
+          correctChat.lastMsg = msg.msg.time;
+          correctChat.msgPreview = msg.msg.content;
+        }else{
+          msg.conv.title = msg.sender;
+          msg.conv.icon = "https://cdn3.iconfinder.com/data/icons/mixed-communication-and-ui-pack-1/48/general_pack_NEW_glyph_profile-512.png";
+          msg.conv.msgs.push(msg.msg);
+          msg.conv.lastMsg = msg.msg.time;
+          msg.conv.msgPreview = msg.msg.content;
+          this.chats.push(msg.conv);
+        }
       });
     });
   }
@@ -132,10 +151,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.showContactModal = false;
   }
 
-  closeNewGroup(){
+  closeGroup(){
     this.showNewGroupModal = false;
   }
-
 
   closeProfile(){
     this.showProfileModal = false;
@@ -155,7 +173,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   addContact(contactInfo){
     this.showContactModal = false;
-    this.showNewGroupModal=false
     let contactExist = this.alreadyAddded(contactInfo);
     let samePerson = false;
     let loggedUser = JSON.parse(window.localStorage.getItem('user'));
@@ -180,6 +197,13 @@ export class HomeComponent implements OnInit, OnDestroy {
           this.chats.push(confirmation.data);
         }
       };
+    }
+  }
+  createGroup(groupInfo){
+    this.showNewGroupModal = false;
+    if(groupInfo){
+      let confirmation = this.chatService.createGroup(groupInfo);
+      this.chats.push(confirmation);
     }
   }
 
