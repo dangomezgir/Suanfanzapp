@@ -23,5 +23,8 @@ import { NewGroupModalComponent } from './components/new-group-modal/new-group-m
   imports: [
     CommonModule, FormsModule
   ],
+  exports: [
+    InboxChatComponent, ChatAreaComponent, ChatMessageComponent
+  ],
 })
 export class HomeModule { }

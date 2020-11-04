@@ -2,6 +2,7 @@ import { Component, Input, OnInit, OnChanges } from '@angular/core';
 import { ChatService } from 'src/app/shared/services/chat/chat.service';
 import { ChatI } from '../../interfaces/ChatI';
 import { MessageI } from '../../interfaces/MessageI';
+import {InboxChatComponent} from '../../components/inbox-chat/inbox-chat.component';
 
 @Component({
   selector: 'app-chat-area',
@@ -18,10 +19,11 @@ export class ChatAreaComponent implements OnInit, OnChanges {
 
   msg: string;
   estado: string;
-
+  contenT: string;
   scrollUp: boolean;
+  boll: boolean = false;
   
-  constructor(public chatService: ChatService) { }
+  constructor(public chatService: ChatService, public inboxChatComponent: InboxChatComponent) { }
 
   ngOnInit(): void {
 
@@ -35,10 +37,11 @@ export class ChatAreaComponent implements OnInit, OnChanges {
     const msg: MessageI = {
       content: this.msg,
       isMe: true,
-      time: "8:58",
+      time: 'new Date()',
       isRead: false,
     }
     this.chatService.sendMsg(msg, this.chatInfo);
+    //this.inboxChatComponent.sendMsg(msg);
     this.msg = "";
     // this.scrollDown();
     // this.scrollDown();
@@ -71,5 +74,25 @@ export class ChatAreaComponent implements OnInit, OnChanges {
     chatArea.scrollTo({top: scrollHeight - clientHeight});
     // console.log(e);
     console.log(scrollHeight - clientHeight);
+  }
+
+  Search(){
+    if(this.contenT != ""){
+      this.msgs=this.msgs.filter(res=>{
+        return res.content.toLowerCase().match(this.contenT.toLowerCase());
+      });
+    }else{
+      this.msgs=this.msgs.filter(norm=>{
+        return norm.content.toLowerCase();
+      });
+    }
+  }
+
+  onClickMe() {
+    if(this.boll==false){
+      this.boll = true;
+    }else{
+      this.boll = false;
+    }
   }
 }

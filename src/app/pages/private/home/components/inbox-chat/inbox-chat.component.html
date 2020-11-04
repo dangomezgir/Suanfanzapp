@@ -5,7 +5,7 @@
     <div class="inboxInfoContainer">
         <div class="detailsContainer">
             <div class="namePersonChat">{{ name }}</div>
-            <div class="messageTime">{{ msgTime }}</div>
+            <div class="messageTime">{{ this.chatMessageComponent.time | date: 'shortTime' }}</div>
         </div>
         <div class="chatContainer">
             <div class="chatStatus" *ngIf="msgPreview != ''">

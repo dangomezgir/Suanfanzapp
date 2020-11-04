@@ -82,6 +82,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.subscriptionList.connection = this.chatService.connect().subscribe(_ => {
       console.log("Nos conectamos");
       this.subscriptionList.connectedUsers=this.chatService.getConnectedUsers().subscribe((users:Array<string>) => this.usersOnline = users) 
+<<<<<<< HEAD
       this.subscriptionList.msgs = this.chatService.getNewMsgs().subscribe((msg: ReceivedMessageI) => {
         let correctChat: ChatI;
         console.log(msg.conv)
@@ -104,6 +105,11 @@ export class HomeComponent implements OnInit, OnDestroy {
           msg.conv.msgPreview = msg.msg.content;
           this.chats.push(msg.conv);
         }
+=======
+      this.subscriptionList.msgs = this.chatService.getNewMsgs().subscribe((msg: MessageI) => {
+        this.currentChat.msgs.push(msg);
+        console.log(msg);
+>>>>>>> juanjose
       });
     });
   }

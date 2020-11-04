@@ -108,6 +108,7 @@ export class RegisterComponent implements OnInit {
         }
       }
       if(emailExist || telefonoExist){
+        alert("El email o el télefono ya existen");
         console.log("El email o el télefono ya existen");
       }
       else{
@@ -126,10 +127,10 @@ export class RegisterComponent implements OnInit {
           this.dbRef.push(user);
           // this.regList.push(user);
           user.password = undefined;
-          // window.localStorage.setItem('user', JSON.stringify(user));
           alert("Registrado correctamente, vuelva a la página Login");
         }
         else {
+          alert("Las contraseñas no coinciden");
           console.log("Las contraseñas ingresadas no coinciden");
         }
       }

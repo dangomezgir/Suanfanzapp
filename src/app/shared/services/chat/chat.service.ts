@@ -72,6 +72,7 @@ export class ChatService {
     let updateRef = firebase.database().ref(`messages`).child(toUser.chatKey).child('msgs');
     let date = new Date();
     let time = `${date.getHours()}:${date.getMinutes()}`;
+    msg.time = time
     updateRef.push({content: msg.content,isRead: false, sender: user.telefono, time})
     this.socket.emit('newMsg', {msg, user, toUser});
   }

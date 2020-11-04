@@ -43,6 +43,7 @@ $titleFont: sfProTextMedium;
         max-width: 65%;
         display: flex;
         align-items: center;
+        justify-content: space-between;
         font-size: 14.2px;
         font-family: $titleFont;
         background: #DBF8C6;
@@ -97,13 +98,14 @@ $titleFont: sfProTextMedium;
     //     top:50%;
     // }
     .leftTail {
-        position: absolute;
         left: 515px;
     }
     .messageTextLeft {
         max-width: 65%;
         display: flex;
         align-items: center;
+        justify-content: space-between;
+        position: relative;
         font-size: 14.2px;
         font-family: $titleFont;
         background: white;
