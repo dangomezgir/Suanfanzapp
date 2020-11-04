@@ -84,25 +84,31 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.subscriptionList.connectedUsers=this.chatService.getConnectedUsers().subscribe((users:Array<string>) => this.usersOnline = users) 
       this.subscriptionList.msgs = this.chatService.getNewMsgs().subscribe((msg: ReceivedMessageI) => {
         let correctChat: ChatI;
-        console.log(msg.conv)
-        if(msg.isgroup){
-          correctChat = this.chats.find(chat => chat.title == msg.title);
-        }else{
-          correctChat = this.chats.find(chat => chat.telefonos.find(telefono => telefono == msg.sender))
+        let user = JSON.parse(window.localStorage.getItem("user"));
+        if(msg.sender == user.telefono){
+          this.currentChat.msgs.push(msg.msg)
         }
-        if(correctChat){
-          correctChat.msgs.push(msg.msg);
-          correctChat.lastMsg = msg.msg.time;
-          correctChat.msgPreview = msg.msg.content;
-        }else{
-          if(!msg.isgroup){
-            msg.conv.title = msg.sender;
-            msg.conv.icon = "https://cdn3.iconfinder.com/data/icons/mixed-communication-and-ui-pack-1/48/general_pack_NEW_glyph_profile-512.png";
+        else{
+          if(msg.isgroup){
+            correctChat = this.chats.find(chat => chat.title == msg.title);
+          }else{
+            correctChat = this.chats.find(chat => chat.telefonos.find(telefono => telefono == msg.sender))
           }
-          msg.conv.msgs.push(msg.msg);
-          msg.conv.lastMsg = msg.msg.time;
-          msg.conv.msgPreview = msg.msg.content;
-          this.chats.push(msg.conv);
+          if(correctChat){
+            console.log(correctChat, "Chat to add meessage")
+            correctChat.msgs.push(msg.msg);
+            correctChat.lastMsg = msg.msg.time;
+            correctChat.msgPreview = msg.msg.content;
+          }else{
+            if(!msg.isgroup){
+              msg.conv.title = msg.sender;
+              msg.conv.icon = "https://cdn3.iconfinder.com/data/icons/mixed-communication-and-ui-pack-1/48/general_pack_NEW_glyph_profile-512.png";
+            }
+            msg.conv.msgs.push(msg.msg);
+            msg.conv.lastMsg = msg.msg.time;
+            msg.conv.msgPreview = msg.msg.content;
+            this.chats.push(msg.conv);
+          }
         }
       });
     });
