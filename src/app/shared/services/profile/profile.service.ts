@@ -12,68 +12,68 @@ export class ProfileService {
 
   constructor() { }
 
-  updateProfileInfo(newInfo){
-    if(newInfo.newIcon){
-      console.log('subiendo foto');
-      
-      let keys = [];
-      let contacts = [];
-      let contacts2 = [];
-      let contactKeys = [];
-      this.db.ref('users').on('child_added', snapshot => {
-        keys.push(snapshot.key);
-      })  
-      // console.log(keys);
-      keys.forEach(element => {
-        this.db.ref('users').child(element).on('child_added', snapshot => {
-          if(typeof snapshot.val() == 'object'){
-            contacts.push(snapshot.val());
-          }
-        })
-      });
-      // console.log(contacts);
-      contacts.forEach(element => {
-        contacts2.push(Object.keys(element))
-      });
-      // console.log(contacts2[1][0]);
-      for(let i = 0; i < contacts2.length; i++){
-        for(let j = 0; j < contacts2[i].length; j++){
-          contactKeys.push(contacts2[i][j]);
-        }
-      }
+  updateProfileInfo(newInfo) {
 
-      
+    let keys = [];
+    let contacts = [];
+    let contacts2 = [];
+    let contactKeys = [];
+    this.db.ref('users').on('child_added', snapshot => {
+      keys.push(snapshot.key);
+    })
+    // console.log(keys);
+    keys.forEach(element => {
+      this.db.ref('users').child(element).on('child_added', snapshot => {
+        if (typeof snapshot.val() == 'object') {
+          contacts.push(snapshot.val());
+        }
+      })
+    });
+    // console.log(contacts);
+    contacts.forEach(element => {
+      contacts2.push(Object.keys(element))
+    });
+    // console.log(contacts2[1][0]);
+    for (let i = 0; i < contacts2.length; i++) {
+      for (let j = 0; j < contacts2[i].length; j++) {
+        contactKeys.push(contacts2[i][j]);
+      }
+    }
+
+    if (newInfo.newIcon) {
+
       this.uploadPicture(newInfo.newIcon, contactKeys, keys);
 
-    }else{
+    } else {
       console.log('no hay foto');
     }
 
-    if(newInfo.newName){
+    if (newInfo.newName) {
       // console.log(newInfo.newName);
-      this.updateName(newInfo.newName);
-    }else{
+      this.updateName(newInfo.newName, contactKeys, keys);
+    } else {
       console.log('no se cambiará el nombre');
     }
 
-    if(newInfo.newLastName){
+    if (newInfo.newLastName) {
       // console.log(newInfo.newName);
       this.updateLastName(newInfo.newLastName);
-    }else{
+    } else {
       console.log('no se cambiará el apellido');
     }
   }
+
   updateLastName(newLastName: any) {
     let key = this.user.userKey;
-    this.db.ref('users').child(key).update({lname: newLastName});
+    this.db.ref('users').child(key).update({ lname: newLastName });
   }
 
-  uploadPicture(foto, contactKeys, keys){
+  uploadPicture(foto, contactKeys, keys) {
     let filename = foto.name;
     let storageRef = this.storage.ref('/profilePics/' + filename);
     let uploadTask = storageRef.put(foto);
 
-    uploadTask.on('state_changed', function(snapshot){
+    uploadTask.on('state_changed', function (snapshot) {
       // Observe state change events such as progress, pause, and resume
       // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
       var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
@@ -86,7 +86,7 @@ export class ProfileService {
           console.log('Upload is running');
           break;
       }
-    }, function(error) {
+    }, function (error) {
       // Handle unsuccessful uploads
       console.log(error);
     }, () => {
@@ -104,21 +104,21 @@ export class ProfileService {
         updates['profilePics/' + postKey] = imgData;
         this.db.ref().update(updates);
         let loggedUserKey = this.user.userKey;
-        this.db.ref('users').child(loggedUserKey).update({icon: downloadURL});
-        
-        
-        for(let i = 0; i < keys.length; i++){
+        this.db.ref('users').child(loggedUserKey).update({ icon: downloadURL });
+
+
+        for (let i = 0; i < keys.length; i++) {
           // console.log('===========')
           // console.log(keys[i]);
           // console.log('-----------')
           this.db.ref('users').child(keys[i]).on('child_added', snapshot => {
-            if(typeof snapshot.val() == 'object'){
-              for(let j = 0; j < contactKeys.length; j++){
+            if (typeof snapshot.val() == 'object') {
+              for (let j = 0; j < contactKeys.length; j++) {
                 // console.log('-----------')
-                this.db.ref('users').child(keys[i]).child('contacts').child(contactKeys[j]).on('child_added', sp =>{
+                this.db.ref('users').child(keys[i]).child('contacts').child(contactKeys[j]).on('child_added', sp => {
                   // console.log(sp.val())
-                  if(sp.val() == this.user.icon){
-                    this.db.ref('users').child(keys[i]).child('contacts').child(contactKeys[j]).update({icon: downloadURL})
+                  if (sp.val() == this.user.icon) {
+                    this.db.ref('users').child(keys[i]).child('contacts').child(contactKeys[j]).update({ icon: downloadURL })
                   }
                 })
                 // console.log('-----------')
@@ -133,8 +133,30 @@ export class ProfileService {
     });
   }
 
-  updateName(newName){
+  updateName(newName, contactKeys, keys) {
     let key = this.user.userKey;
-    this.db.ref('users').child(key).update({name: newName});
+    this.db.ref('users').child(key).update({ name: newName });
+    for (let i = 0; i < keys.length; i++) {
+      // console.log('===========')
+      // console.log(keys[i]);
+      // console.log('-----------')
+      this.db.ref('users').child(keys[i]).on('child_added', snapshot => {
+        if (typeof snapshot.val() == 'object') {
+          for (let j = 0; j < contactKeys.length; j++) {
+            // console.log('-----------')
+            this.db.ref('users').child(keys[i]).child('contacts').child(contactKeys[j]).on('child_added', sp => {
+              // console.log(sp.val())
+              if (sp.val() == this.user.name) {
+                this.db.ref('users').child(keys[i]).child('contacts').child(contactKeys[j]).update({ name: newName })
+                console.log(sp.val());
+              }
+            })
+            // console.log('-----------')
+          }
+        }
+      })
+      // console.log('-----------')
+    }
+    
   }
 }
