@@ -19,7 +19,7 @@ export class ChatAreaComponent implements OnInit, OnChanges {
 
   msg: string;
   estado: string;
-
+  contenT: string;
   scrollUp: boolean;
   
   constructor(public chatService: ChatService, public inboxChatComponent: InboxChatComponent) { }
@@ -73,5 +73,15 @@ export class ChatAreaComponent implements OnInit, OnChanges {
     chatArea.scrollTo({top: scrollHeight - clientHeight});
     // console.log(e);
     console.log(scrollHeight - clientHeight);
+  }
+
+  Search(){
+    if(this.contenT != ""){
+      this.msgs=this.msgs.filter(res=>{
+        return res.content.toLowerCase().match(this.contenT.toLowerCase());
+      });
+    }else{
+      return this.msg
+    }
   }
 }
