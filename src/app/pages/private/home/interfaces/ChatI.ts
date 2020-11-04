@@ -11,4 +11,5 @@ export interface ChatI{
     emails: Array<string>
     isGroup: boolean
     chatKey: string
+    groupAdmin?:Array<string>
 }

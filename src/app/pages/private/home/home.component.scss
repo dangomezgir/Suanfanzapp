@@ -84,6 +84,17 @@ $titleFont: sfProTextMedium;
                             border-radius: 50%;
                         }
                     }
+                    .newGroupContainer {
+                        width: 40px;
+                        height: 40px;
+                        margin: 0 0 0 10px;
+                        padding: 8px;
+                        cursor: pointer;
+                        &:active {
+                            background: #D5D5D5;
+                            border-radius: 50%;
+                        }
+                    }
                     .leftMore {
                         width: 40px;
                         height: 40px;
