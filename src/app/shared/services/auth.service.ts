@@ -30,7 +30,9 @@ export class AuthService {
           let processedContacts = [];
           if('contacts' in regList[i]){
             Object.keys(regList[i].contacts).forEach(element => {
-              processedContacts.push(regList[i].contacts[element])
+              let data = regList[i].contacts[element]
+              data.key = element;
+              processedContacts.push(data)
             });
           }
           regList[i].contacts = processedContacts;

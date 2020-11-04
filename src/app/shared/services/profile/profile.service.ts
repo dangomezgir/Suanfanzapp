@@ -15,7 +15,36 @@ export class ProfileService {
   updateProfileInfo(newInfo){
     if(newInfo.newIcon){
       console.log('subiendo foto');
-      this.uploadPicture(newInfo.newIcon);
+      
+      let keys = [];
+      let contacts = [];
+      let contacts2 = [];
+      let contactKeys = [];
+      this.db.ref('users').on('child_added', snapshot => {
+        keys.push(snapshot.key);
+      })  
+      // console.log(keys);
+      keys.forEach(element => {
+        this.db.ref('users').child(element).on('child_added', snapshot => {
+          if(typeof snapshot.val() == 'object'){
+            contacts.push(snapshot.val());
+          }
+        })
+      });
+      // console.log(contacts);
+      contacts.forEach(element => {
+        contacts2.push(Object.keys(element))
+      });
+      // console.log(contacts2[1][0]);
+      for(let i = 0; i < contacts2.length; i++){
+        for(let j = 0; j < contacts2[i].length; j++){
+          contactKeys.push(contacts2[i][j]);
+        }
+      }
+
+      
+      this.uploadPicture(newInfo.newIcon, contactKeys, keys);
+
     }else{
       console.log('no hay foto');
     }
@@ -39,7 +68,7 @@ export class ProfileService {
     this.db.ref('users').child(key).update({lname: newLastName});
   }
 
-  uploadPicture(foto){
+  uploadPicture(foto, contactKeys, keys){
     let filename = foto.name;
     let storageRef = this.storage.ref('/profilePics/' + filename);
     let uploadTask = storageRef.put(foto);
@@ -74,9 +103,32 @@ export class ProfileService {
         };
         updates['profilePics/' + postKey] = imgData;
         this.db.ref().update(updates);
-        let userKey = this.user.userKey;
-        this.db.ref('users').child(userKey).update({icon: downloadURL});
+        let loggedUserKey = this.user.userKey;
+        this.db.ref('users').child(loggedUserKey).update({icon: downloadURL});
+        
+        
+        for(let i = 0; i < keys.length; i++){
+          // console.log('===========')
+          // console.log(keys[i]);
+          // console.log('-----------')
+          this.db.ref('users').child(keys[i]).on('child_added', snapshot => {
+            if(typeof snapshot.val() == 'object'){
+              for(let j = 0; j < contactKeys.length; j++){
+                // console.log('-----------')
+                this.db.ref('users').child(keys[i]).child('contacts').child(contactKeys[j]).on('child_added', sp =>{
+                  // console.log(sp.val())
+                  if(sp.val() == this.user.icon){
+                    this.db.ref('users').child(keys[i]).child('contacts').child(contactKeys[j]).update({icon: downloadURL})
+                  }
+                })
+                // console.log('-----------')
+              }
+            }
+          })
+          // console.log('-----------')
+        }
         console.log('icono actualizado');
+
       });
     });
   }

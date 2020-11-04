@@ -3,4 +3,5 @@ export interface ContactI{
     telefono: string;
     email: string;
     icon: string;
+    key: string;
 }
