@@ -95,8 +95,10 @@ export class HomeComponent implements OnInit, OnDestroy {
           correctChat.lastMsg = msg.msg.time;
           correctChat.msgPreview = msg.msg.content;
         }else{
-          msg.conv.title = msg.sender;
-          msg.conv.icon = "https://cdn3.iconfinder.com/data/icons/mixed-communication-and-ui-pack-1/48/general_pack_NEW_glyph_profile-512.png";
+          if(!msg.isgroup){
+            msg.conv.title = msg.sender;
+            msg.conv.icon = "https://cdn3.iconfinder.com/data/icons/mixed-communication-and-ui-pack-1/48/general_pack_NEW_glyph_profile-512.png";
+          }
           msg.conv.msgs.push(msg.msg);
           msg.conv.lastMsg = msg.msg.time;
           msg.conv.msgPreview = msg.msg.content;
