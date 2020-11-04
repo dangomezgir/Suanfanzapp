@@ -45,12 +45,12 @@ export class ChatAreaComponent implements OnInit, OnChanges {
     this.msg = "";
     // this.scrollDown();
     // this.scrollDown();
-    setTimeout(this.scrollDown, 10);
+    setTimeout(this.scrollDown, 150);
     console.log(this.chatService.getNewMsgs());
   }
 
   onScroll(event){
-    console.log(event);
+    // console.log(event);
     let scrollTop = event.target.scrollTop;
     let scrollHeight = event.target.scrollHeight;
     let offsetHeight = event.target.offsetHeight;
